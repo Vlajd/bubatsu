@@ -28,3 +28,4 @@ void main() {
 
 	color = texture(u_Texture, v_TexCoord);
 }
+

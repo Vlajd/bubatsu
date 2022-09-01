@@ -8,18 +8,18 @@
 
 namespace Bubatsu
 {
-	class BUBATSU_API Log
-	{
-	public:
-		static void Init();
+    class BUBATSU_API Log
+    {
+    public:
+        static void Init();
 
-		inline static SPtr<spdlog::logger>& GetCoreLogger() { return m_CoreLogger; }
-		inline static SPtr<spdlog::logger>& GetClientLogger() { return m_ClientLogger; }
+        inline static SPtr<spdlog::logger>& GetCoreLogger() { return m_CoreLogger; }
+        inline static SPtr<spdlog::logger>& GetClientLogger() { return m_ClientLogger; }
 
-	private:
-		static SPtr<spdlog::logger> m_CoreLogger;
-		static SPtr<spdlog::logger> m_ClientLogger;
-	};
+    private:
+        static SPtr<spdlog::logger> m_CoreLogger;
+        static SPtr<spdlog::logger> m_ClientLogger;
+    };
 }
 
 // Core Logging Macros

@@ -4,5 +4,6 @@
 
 namespace Bubatsu {
 
-	RenderApi::Api RenderApi::m_Api = RenderApi::Api::OpenGL;
+    RenderApi::Api RenderApi::m_Api = RenderApi::Api::OpenGL;
 }
+

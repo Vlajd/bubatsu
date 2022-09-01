@@ -12,8 +12,10 @@
 #include <unordered_set>
 #include <vector>
 
+#include "Bubatsu/Core/Log.h"
+
 #ifdef BBZ_PLATFORM_WINDOWS
-#	include <Windows.h>
+#   include <Windows.h>
 #endif
 
 

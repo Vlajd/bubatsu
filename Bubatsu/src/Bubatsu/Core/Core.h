@@ -1,7 +1,7 @@
 #pragma once
 
 #include "bbzpch.h"
-
+#include "Bubatsu/Core/Log.h"
 
 #ifdef BBZ_PLATFORM_WINDOWS
 #	ifdef BBZ_DYNAMIC_LINK
@@ -22,23 +22,21 @@
 #endif
 
 #define BIT(x) (1 << x)
-#define BBZ_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
+#define BBZ_BIND_EVENT_FUNCTION(fn) std::bind(&fn, this, std::placeholders::_1)
 
 namespace Bubatsu
 {
-	template<typename T>
-	using UPtr = std::unique_ptr<T>;
+    template<typename T>
+    using UPtr = std::unique_ptr<T>;
 
-	template<typename T>
-	using SPtr = std::shared_ptr<T>;
+    template<typename T>
+    using SPtr = std::shared_ptr<T>;
 
-	using String = std::string;
+    using String = std::string;
 
-	template<typename T>
-	using Vector = std::vector<T>;
+    template<typename T>
+    using Vector = std::vector<T>;
 }
-
-#include "Bubatsu/Log/Log.h"
 
 #ifdef BBZ_ENABLE_ASSERTS
 #	define BBZ_ASSERT(x, ...) { if((x)) { BBZ_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }

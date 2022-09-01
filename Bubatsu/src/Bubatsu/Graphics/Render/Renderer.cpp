@@ -6,30 +6,35 @@
 
 namespace Bubatsu
 {
-	Renderer::SceneData* Renderer::m_SceneData = new Renderer::SceneData;
+    Renderer::SceneData* Renderer::m_SceneData = new Renderer::SceneData;
 
-	void Renderer::Init()
-	{
-		RenderCommand::Init();
-	}
+    void Renderer::Init()
+    {
+        RenderCommand::Init();
+    }
 
-	void Renderer::BeginScene(OrthographicCamera& camera)
-	{
-		m_SceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();
-	}
+    void Renderer::OnWindowResized(uint32_t width, uint32_t height)
+    {
+        RenderCommand::SetViewport(0, 0, width, height);
+    }
 
-	void Renderer::EndScene()
-	{
-		// Optional TODO
-	}
+    void Renderer::BeginScene(OrthographicCamera& camera)
+    {
+        m_SceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();
+    }
 
-	void Renderer::Submit(const SPtr<Shader>& shader, const SPtr<VertexArray>& vertexArray, const glm::mat4& transform)
-	{
-		shader->Bind();
-		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformFMat4("u_ViewProjection", m_SceneData->ViewProjectionMatrix);
-		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformFMat4("u_Transform", transform);
+    void Renderer::EndScene()
+    {
+        // Optional TODO
+    }
 
-		vertexArray->Bind();
-		RenderCommand::DrawIndexed(vertexArray);
-	}
+    void Renderer::Submit(const SPtr<Shader>& shader, const SPtr<VertexArray>& vertexArray, const glm::mat4& transform)
+    {
+        shader->Bind();
+        std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformFMat4("u_ViewProjection", m_SceneData->ViewProjectionMatrix);
+        std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformFMat4("u_Transform", transform);
+
+        vertexArray->Bind();
+        RenderCommand::DrawIndexed(vertexArray);
+    }
 }
