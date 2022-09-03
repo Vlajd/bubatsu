@@ -2,7 +2,8 @@
 bin
 bin-obj
 *.user
-*.vcproj
+*.vcxproj
 *.filters
 *.ini
+*.sln
 premake5.lua

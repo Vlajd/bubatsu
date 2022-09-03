@@ -31,7 +31,7 @@ namespace Bubatsu
         bool OnWindowClosed(WindowClosedEvent& e);
         bool OnWindowResized(WindowResizedEvent& e);
 
-        UPtr<Window> m_Window;
+        URef<Window> m_Window;
         ImGuiLayer* m_ImGuiLayer;
         bool m_Running = true;
         LayerStack m_LayerStack;

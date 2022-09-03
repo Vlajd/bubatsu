@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Bubatsu/Graphics/Render/Context.h"
+#include "Bubatsu/Graphics/Core/Context.h"
 
 
 // FORWARD

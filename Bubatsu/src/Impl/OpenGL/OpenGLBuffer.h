@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Bubatsu/Graphics/Render/Buffer.h"
+#include "Bubatsu/Graphics/Core/Buffer.h"
 
 
 namespace Bubatsu

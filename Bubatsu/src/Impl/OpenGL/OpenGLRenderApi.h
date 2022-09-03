@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Bubatsu/Graphics/Render/RenderApi.h"
+#include "Bubatsu/Graphics/Core/RenderApi.h"
 
 
 namespace Bubatsu
@@ -13,7 +13,7 @@ namespace Bubatsu
         virtual void SetClearColor(const FVec4& color) override;
         virtual void Clear() override;
 
-        virtual void DrawIndexed(const SPtr<VertexArray>& vertexArray) override;
+        virtual void DrawIndexed(const SRef<VertexArray>& vertexArray) override;
     };
 }
 

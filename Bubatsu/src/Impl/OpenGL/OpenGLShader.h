@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Bubatsu/Graphics/Render/Shader.h"
+#include "Bubatsu/Graphics/Core/Shader.h"
 #include "Bubatsu/Core/Math.h"
 #include "Bubatsu/Core/Core.h"
 
@@ -20,6 +20,10 @@ namespace Bubatsu
         virtual void Unbind() const override;
 
         virtual const String& GetName() const override { return m_Name; }
+        virtual void SetInt(const String& name, int value) override;
+        virtual void SetFVec3(const String& name, FVec3 value) override;
+        virtual void SetFVec4(const String& name, FVec4 value) override;
+        virtual void SetFMat4(const String& name, FMat4 value) override;
 
         void UploadUniformInt(const String& name, int value);
         void UploadUniformIVec2(const String& name, const IVec2& values);

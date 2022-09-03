@@ -51,7 +51,7 @@ namespace Bubatsu
 
         m_Window = glfwCreateWindow((int)properties.Width, (int)properties.Height, m_Data.Title.c_str(), nullptr, nullptr);
 
-        m_Context = new OpenGLContext(m_Window);
+        m_Context = NewSRef<OpenGLContext>(m_Window);
         m_Context->Init();
 
         glfwSetWindowUserPointer(m_Window, &m_Data);

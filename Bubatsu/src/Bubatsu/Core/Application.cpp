@@ -1,7 +1,7 @@
 #include "bbzpch.h"
 #include "Application.h"
 
-#include "Bubatsu/Graphics/Render/Renderer.h"
+#include "Bubatsu/Graphics/Core/Renderer.h"
 
 #include <GLFW/glfw3.h>
 
@@ -17,7 +17,7 @@ namespace Bubatsu
         BBZ_CORE_ASSERT(s_Instance, "Application Already Exists!")
             s_Instance = this;
 
-        m_Window = UPtr<Window>(Window::Create());
+        m_Window = URef<Window>(Window::Create());
         m_Window->SetEventCallback(BIND_EVENT_FUNCTION(OnEvent));
 
         Renderer::Init();

@@ -50,7 +50,7 @@ namespace Bubatsu
         glBindVertexArray(NULL);
     }
 
-    void OpenGLVertexArray::AddVertexBuffer(const SPtr<VertexBuffer>& vertexBuffer)
+    void OpenGLVertexArray::AddVertexBuffer(const SRef<VertexBuffer>& vertexBuffer)
     {
         BBZ_CORE_ASSERT(!vertexBuffer->GetLayout().GetElements().size(), "OpenGLVertexArray::AddVertexBuffer::Vertex Buffer Has No Layout")
 
@@ -78,7 +78,7 @@ namespace Bubatsu
         m_VertexBuffers.push_back(vertexBuffer);
     }
 
-    void OpenGLVertexArray::SetIndexBuffer(const SPtr<IndexBuffer>& indexBuffer)
+    void OpenGLVertexArray::SetIndexBuffer(const SRef<IndexBuffer>& indexBuffer)
     {
         glBindVertexArray(m_RendererID);
         indexBuffer->Bind();

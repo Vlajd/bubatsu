@@ -20,6 +20,6 @@ namespace Bubatsu
     class Texture2D : public Texture
     {
     public:
-        static SPtr<Texture2D> Create(const String& path);
+        static SRef<Texture2D> Create(const String& path);
     };
 }

@@ -27,11 +27,21 @@
 namespace Bubatsu
 {
     template<typename T>
-    using UPtr = std::unique_ptr<T>;
+    using URef = std::unique_ptr<T>;
+    template<typename T, typename... Args>
+    constexpr URef<T> NewURef(Args&&... args)
+    {
+        return std::make_unique<T>(std::forward<Args>(args)...);
+    }
 
     template<typename T>
-    using SPtr = std::shared_ptr<T>;
-
+    using SRef = std::shared_ptr<T>;
+    template<typename T, typename... Args>
+    constexpr SRef<T> NewSRef(Args&&... args)
+    {
+        return std::make_shared<T>(std::forward<Args>(args)...);
+    }
+    
     using String = std::string;
 
     template<typename T>
@@ -39,8 +49,8 @@ namespace Bubatsu
 }
 
 #ifdef BBZ_ENABLE_ASSERTS
-#	define BBZ_ASSERT(x, ...) { if((x)) { BBZ_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
-#	define BBZ_CORE_ASSERT(x, ...) { if((x)) { BBZ_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
+#	define BBZ_ASSERT(x, ...) { if(x) { BBZ_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
+#	define BBZ_CORE_ASSERT(x, ...) { if(x) { BBZ_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
 #else
 #	define BBZ_ASSERT(x, ...)
 #	define BBZ_CORE_ASSERT(x, ...)

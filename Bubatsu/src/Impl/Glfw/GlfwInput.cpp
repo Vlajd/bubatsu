@@ -7,7 +7,7 @@
 
 namespace Bubatsu
 {
-    Input* Input::s_Instance = new GlfwInput();
+    SRef<Input> Input::s_Instance = NewSRef<GlfwInput>();
 
     bool GlfwInput::IsKeyboardPressedImpl(int keyCode)
     {

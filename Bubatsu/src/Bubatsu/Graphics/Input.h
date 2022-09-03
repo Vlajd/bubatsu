@@ -24,6 +24,6 @@ namespace Bubatsu {
         virtual float GetMouseYImpl() = 0;
 
     private:
-        static Input* s_Instance;
+        static SRef<Input> s_Instance;
     };
 }

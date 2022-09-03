@@ -1,7 +1,7 @@
 #pragma once
 
 #include "bbzpch.h"
-#include "Bubatsu/Graphics/Render/Texture.h"
+#include "Bubatsu/Graphics/Core/Texture.h"
 
 
 namespace Bubatsu

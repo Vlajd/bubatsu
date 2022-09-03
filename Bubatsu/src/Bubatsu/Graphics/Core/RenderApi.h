@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Bubatsu/Graphics/Render/VertexArray.h"
+#include "Bubatsu/Graphics/Core/VertexArray.h"
 #include "Bubatsu/Core/Core.h"
 #include "Bubatsu/Core/Math.h"
 
@@ -20,7 +20,7 @@ namespace Bubatsu
         virtual void SetClearColor(const FVec4& color) = 0;
         virtual void Clear() = 0;
 
-        virtual void DrawIndexed(const SPtr<VertexArray>& vertexArray) = 0;
+        virtual void DrawIndexed(const SRef<VertexArray>& vertexArray) = 0;
 
         inline static Api GetApi() { return m_Api; }
 

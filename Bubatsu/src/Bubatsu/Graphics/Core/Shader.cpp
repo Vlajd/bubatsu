@@ -1,13 +1,13 @@
 #include "bbzpch.h"
 #include "Shader.h"
 
-#include "Bubatsu/Graphics/Render/Renderer.h"
+#include "Bubatsu/Graphics/Core/Renderer.h"
 #include "Impl/OpenGL/OpenGLShader.h"
 
 
 namespace Bubatsu
 {
-    SPtr<Shader> Shader::Create(const String& filepath)
+    SRef<Shader> Shader::Create(const String& filepath)
     {
         switch (Renderer::GetApi())
         {
@@ -18,7 +18,7 @@ namespace Bubatsu
         BBZ_CORE_ASSERT(true, "VertexArray::Unknown RenderApi!");
         return nullptr;
     }
-    SPtr<Shader> Shader::Create(const String& name, const String& vertexSrc, const String& fragmentSrc)
+    SRef<Shader> Shader::Create(const String& name, const String& vertexSrc, const String& fragmentSrc)
     {
         switch (Renderer::GetApi())
         {
@@ -30,33 +30,33 @@ namespace Bubatsu
         return nullptr;
     }
 
-    void ShaderLibrary::Add(const SPtr<Shader>& shader)
+    void ShaderLibrary::Add(const SRef<Shader>& shader)
     {
         auto& name = shader->GetName();
         Add(name, shader);
     }
 
-    void ShaderLibrary::Add(const String& name, const SPtr<Shader>& shader)
+    void ShaderLibrary::Add(const String& name, const SRef<Shader>& shader)
     {
         BBZ_CORE_ASSERT(Exists(name), "Shader Already Exsists");
         m_Shaders[name] = shader;
     }
 
-    SPtr<Shader> ShaderLibrary::Load(const String& filepath)
+    SRef<Shader> ShaderLibrary::Load(const String& filepath)
     {
         auto shader = Shader::Create(filepath);
         Add(shader);
         return shader;
     }
 
-    SPtr<Shader> ShaderLibrary::Load(const String& name, const String& filepath)
+    SRef<Shader> ShaderLibrary::Load(const String& name, const String& filepath)
     {
         auto shader = Shader::Create(filepath);
         Add(name, shader);
         return shader;
     }
 
-    SPtr<Shader> ShaderLibrary::Get(const String& name)
+    SRef<Shader> ShaderLibrary::Get(const String& name)
     {
         BBZ_CORE_ASSERT(!Exists(name), "Shader Not Found!");
         return m_Shaders[name];

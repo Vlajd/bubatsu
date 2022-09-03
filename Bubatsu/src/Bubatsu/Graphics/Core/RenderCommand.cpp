@@ -6,6 +6,6 @@
 
 namespace Bubatsu
 {
-    RenderApi* RenderCommand::m_RenderApi = new OpenGLRenderApi;
+    SRef<RenderApi> RenderCommand::s_RenderApi = NewSRef<OpenGLRenderApi>();
 }
 

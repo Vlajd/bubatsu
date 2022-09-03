@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Bubatsu/Graphics/Window.h"
-#include "Bubatsu/Graphics/Render/Context.h"
+#include "Bubatsu/Graphics/Core/Context.h"
 
 #include <GLFW/glfw3.h>
 
@@ -35,7 +35,7 @@ namespace Bubatsu
         virtual void ShutDown();
 
         GLFWwindow* m_Window;
-        Context* m_Context;
+        SRef<Context> m_Context;
 
         struct WindowData
         {

@@ -58,6 +58,26 @@ namespace Bubatsu
         glUseProgram(NULL);
     }
 
+    void OpenGLShader::SetInt(const String& name, int value)
+    {
+        UploadUniformInt(name, value);
+    }
+
+    void OpenGLShader::SetFVec3(const String& name, FVec3 value)
+    {
+        UploadUniformFVec3(name, value);
+    }
+
+    void OpenGLShader::SetFVec4(const String& name, FVec4 value)
+    {
+        UploadUniformFVec4(name, value);
+    }
+
+    void OpenGLShader::SetFMat4(const String& name, FMat4 value)
+    {
+        UploadUniformFMat4(name, value);
+    }
+
     void OpenGLShader::UploadUniformInt(const String& name, int value)
     {
         GLint location = glGetUniformLocation(m_RendererID, name.c_str());
@@ -138,7 +158,8 @@ namespace Bubatsu
         }
         else
         {
-            BBZ_CORE_ERROR("Could Not Open FIle '{0}'", filepath);
+            BBZ_CORE_ERROR("Could Not Open File '{}'", filepath);
+            BBZ_CORE_ASSERT(true, "");
         }
 
         return result;

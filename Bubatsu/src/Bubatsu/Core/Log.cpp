@@ -6,8 +6,8 @@
 
 namespace Bubatsu
 {
-    SPtr<spdlog::logger> Log::m_CoreLogger;
-    SPtr<spdlog::logger> Log::m_ClientLogger;
+    SRef<spdlog::logger> Log::m_CoreLogger;
+    SRef<spdlog::logger> Log::m_ClientLogger;
 
     void Log::Init()
     {

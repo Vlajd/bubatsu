@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Bubatsu/Graphics/Render/Shader.h"
-#include "Bubatsu/Graphics/Render/RenderCommand.h"
+#include "Bubatsu/Graphics/Core/Shader.h"
+#include "Bubatsu/Graphics/Core/RenderCommand.h"
 #include "Bubatsu/Graphics/Camera/OrthographicCamera.h"
 
 
@@ -18,7 +18,7 @@ namespace Bubatsu
         static void EndScene();
 
         // Implemented by correspondin API
-        static void Submit(const SPtr<Shader>& shader, const SPtr<VertexArray>& vertexArray, const FMat4& transform = FMat4(1.0f));
+        static void Submit(const SRef<Shader>& shader, const SRef<VertexArray>& vertexArray, const FMat4& transform = FMat4(1.0f));
 
         inline static RenderApi::Api GetApi()
         {
@@ -31,6 +31,6 @@ namespace Bubatsu
             FMat4 ViewProjectionMatrix;
         };
 
-        static SceneData* m_SceneData;
+        static SRef<SceneData> s_SceneData;
     };
 }

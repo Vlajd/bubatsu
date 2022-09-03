@@ -1,9 +1,10 @@
 #include "ExampleLayer.h"
+#include "Impl/OpenGL/OpenGLShader.h"
 
 ExampleLayer::ExampleLayer()
-    : Layer("Example"), m_Camera(690.0f / 420.0f), m_SquarePosition(0.0f)
+    : Layer("Example"), m_Camera(690.0f / 420.0f, false), m_SquarePosition(0.0f)
 {
-    m_VertexArray.reset(Bubatsu::VertexArray::Create());
+    m_VertexArray = Bubatsu::VertexArray::Create();
 
     float vertices[3 * 7] =
     {
@@ -12,8 +13,8 @@ ExampleLayer::ExampleLayer()
          0.5f, -0.5f, 0.0f, 0.15f, 0.1f, 0.2f, 0.0f
     };
 
-    Bubatsu::SPtr<Bubatsu::VertexBuffer> vertexBuffer;
-    vertexBuffer.reset(Bubatsu::VertexBuffer::Create(vertices, sizeof(vertices)));
+    Bubatsu::SRef<Bubatsu::VertexBuffer> vertexBuffer;
+    vertexBuffer = Bubatsu::VertexBuffer::Create(vertices, sizeof(vertices));
 
     Bubatsu::BufferLayout layout =
     {
@@ -26,11 +27,11 @@ ExampleLayer::ExampleLayer()
 
     uint32_t indices[3] = { 0, 1, 2 };
 
-    Bubatsu::SPtr<Bubatsu::IndexBuffer> indexBuffer;
-    indexBuffer.reset(Bubatsu::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+    Bubatsu::SRef<Bubatsu::IndexBuffer> indexBuffer;
+    indexBuffer = Bubatsu::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
     m_VertexArray->SetIndexBuffer(indexBuffer);
 
-    m_SquareVA.reset(Bubatsu::VertexArray::Create());
+    m_SquareVA = Bubatsu::VertexArray::Create();
 
     float squareVertices[5 * 4] =
     {
@@ -40,8 +41,8 @@ ExampleLayer::ExampleLayer()
         -0.5f,  0.5f,  0.0f, 0.0f, 1.0f
     };
 
-    Bubatsu::SPtr<Bubatsu::VertexBuffer> squareVB;
-    squareVB.reset(Bubatsu::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
+    Bubatsu::SRef<Bubatsu::VertexBuffer> squareVB;
+    squareVB = Bubatsu::VertexBuffer::Create(squareVertices, sizeof(squareVertices));
 
     squareVB->SetLayout(
     {
@@ -51,8 +52,8 @@ ExampleLayer::ExampleLayer()
     m_SquareVA->AddVertexBuffer(squareVB);
 
     uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
-    Bubatsu::SPtr<Bubatsu::IndexBuffer> squareIB;
-    squareIB.reset(Bubatsu::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
+    Bubatsu::SRef<Bubatsu::IndexBuffer> squareIB;
+    squareIB = Bubatsu::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
     m_SquareVA->SetIndexBuffer(squareIB);
 
     // [[Shader1]]

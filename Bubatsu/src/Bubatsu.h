@@ -9,12 +9,14 @@
 #include "Bubatsu/Graphics/Input.h"
 #include "Bubatsu/Core/Codes.h"
 
-#include "Bubatsu/Graphics/Render/Buffer.h"
-#include "Bubatsu/Graphics/Render/RenderCommand.h"
-#include "Bubatsu/Graphics/Render/Renderer.h"
-#include "Bubatsu/Graphics/Render/Shader.h"
-#include "Bubatsu/Graphics/Render/Texture.h"
-#include "Bubatsu/Graphics/Render/VertexArray.h"
+#include "Bubatsu/Graphics/Core/Buffer.h"
+#include "Bubatsu/Graphics/Core/RenderCommand.h"
+#include "Bubatsu/Graphics/Core/Renderer.h"
+#include "Bubatsu/Graphics/Core/Shader.h"
+#include "Bubatsu/Graphics/Core/Texture.h"
+#include "Bubatsu/Graphics/Core/VertexArray.h"
+
+#include "Bubatsu/Graphics/Renderer/Renderer2D.h"
 
 #include "Bubatsu/Graphics/Camera/OrthographicCamera.h"
 #include "Bubatsu/Graphics/Camera/OrthographicCameraController.h"

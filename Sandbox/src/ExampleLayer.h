@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Bubatsu.h>
-#include <Impl/OpenGL/OpenGLShader.h>
 #include <imgui.h>
 
 class ExampleLayer : public Bubatsu::Layer
@@ -18,14 +17,14 @@ private:
 
     Bubatsu::ShaderLibrary m_ShaderLibrary;
 
-    Bubatsu::SPtr<Bubatsu::Shader> m_Shader;
-    Bubatsu::SPtr<Bubatsu::VertexArray> m_VertexArray;
+    Bubatsu::SRef<Bubatsu::Shader> m_Shader;
+    Bubatsu::SRef<Bubatsu::VertexArray> m_VertexArray;
 
-    Bubatsu::SPtr<Bubatsu::Shader> m_FlatColorShader;
-    Bubatsu::SPtr<Bubatsu::VertexArray> m_SquareVA;
+    Bubatsu::SRef<Bubatsu::Shader> m_FlatColorShader;
+    Bubatsu::SRef<Bubatsu::VertexArray> m_SquareVA;
 
     // texture
-    Bubatsu::SPtr<Bubatsu::Texture2D> m_Texture, m_CodeChickenTexture;
+    Bubatsu::SRef<Bubatsu::Texture2D> m_Texture, m_CodeChickenTexture;
 
     Bubatsu::OrthographicCameraController m_Camera;
 
