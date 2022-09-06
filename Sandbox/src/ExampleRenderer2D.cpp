@@ -25,8 +25,8 @@ void ExampleRenderer2D::OnUpdate(Bubatsu::Timestep ts)
     Bubatsu::Renderer2D::DrawQuad({ 0.0f, 0.0f }, { 0.8f, 0.8f }, m_Color);
     Bubatsu::Renderer2D::DrawQuad({ 5.0f, 5.0f }, { 1.8f, 0.8f }, m_Color);
     Bubatsu::Renderer2D::DrawQuad({ -5.0f, -5.0f }, { 1.8f, 0.8f }, m_Color);
-    Bubatsu::Renderer2D::DrawQuad({ 10.0f, 10.0f }, { 3.0f, 3.0f }, m_Texture, { 0.0f, 0.2f, 0.5f, 1.0f });
-    Bubatsu::Renderer2D::DrawQuad({ 5.0f, 10.0f }, { 3.0f, 3.0f }, m_Texture, { 0.0f, 0.2f, 0.5f, 1.0f });
+    Bubatsu::Renderer2D::DrawQuad({ 10.0f, 10.0f }, 125.0f, { 3.0f, 3.0f }, m_Texture, { 0.0f, 0.2f, 0.5f, 1.0f });
+    Bubatsu::Renderer2D::DrawQuad({ 5.0f, 10.0f }, { 3.0f, 3.0f }, m_Texture, 2.0f);
 
     Bubatsu::Renderer2D::EndScene();
 }

@@ -7,3 +7,4 @@ bin-obj
 *.ini
 *.sln
 premake5.lua
+*.dbg.json
