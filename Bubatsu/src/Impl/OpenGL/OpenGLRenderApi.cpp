@@ -8,6 +8,8 @@ namespace Bubatsu
 {
     void OpenGLRenderApi::Init()
     {
+        BBZ_PROFILE_FUNCTION();
+
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -32,5 +34,6 @@ namespace Bubatsu
     void OpenGLRenderApi::DrawIndexed(const SRef<VertexArray>& vertexArray)
     {
         glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+        glBindTexture(GL_TEXTURE_2D, 0);
     }
 }

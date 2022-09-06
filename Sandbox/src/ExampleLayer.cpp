@@ -132,10 +132,10 @@ ExampleLayer::ExampleLayer()
 
 
     // [[Shader3]]
-    auto textureShader = m_ShaderLibrary.Load("assets/shaders/Texture.glsl");
+    auto textureShader = m_ShaderLibrary.Load("Assets/Shaders/Texture.glsl");
 
-    m_Texture = (Bubatsu::Texture2D::Create("assets/textures/Checkerboard.png"));
-    m_CodeChickenTexture = (Bubatsu::Texture2D::Create("assets/textures/chicken.png"));
+    m_Texture = (Bubatsu::Texture2D::Create("Assets/Textures/Checkerboard.png"));
+    m_CodeChickenTexture = (Bubatsu::Texture2D::Create("Assets/Textures/chicken.png"));
 
     std::dynamic_pointer_cast<Bubatsu::OpenGLShader>(textureShader)->Bind();
     std::dynamic_pointer_cast<Bubatsu::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);

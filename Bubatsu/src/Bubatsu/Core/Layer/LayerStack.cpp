@@ -32,6 +32,7 @@ namespace Bubatsu
 
         if (it != m_Layers.end())
         {
+            layer->OnDetach();
             m_Layers.erase(it);
             m_LayerInsertIndex--;
         }
@@ -43,6 +44,7 @@ namespace Bubatsu
 
         if (it != m_Layers.end())
         {
+            overlay->OnDetach();
             m_Layers.erase(it);
         }
     }

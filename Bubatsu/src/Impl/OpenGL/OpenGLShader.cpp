@@ -8,6 +8,8 @@ namespace Bubatsu
 {
     static GLenum ShaderTypeFromString(const String& type)
     {
+        BBZ_PROFILE_FUNCTION();
+
         if (type == "vertex")
         {
             return GL_VERTEX_SHADER;
@@ -23,6 +25,8 @@ namespace Bubatsu
 
     OpenGLShader::OpenGLShader(const String& filepath)
     {
+        BBZ_PROFILE_FUNCTION();
+
         String source = ReadFile(filepath);
         auto shaderSources = PreProcess(source);
         Compile(shaderSources);
@@ -37,6 +41,8 @@ namespace Bubatsu
     OpenGLShader::OpenGLShader(const String& name, const String& vertexSrc, const String& fragmentSrc)
         : m_Name(name)
     {
+        BBZ_PROFILE_FUNCTION();
+        
         std::unordered_map<GLenum, String> sources;
         sources[GL_VERTEX_SHADER] = vertexSrc;
         sources[GL_FRAGMENT_SHADER] = fragmentSrc;
@@ -45,16 +51,22 @@ namespace Bubatsu
 
     OpenGLShader::~OpenGLShader()
     {
+        BBZ_PROFILE_FUNCTION();
+
         glDeleteProgram(m_RendererID);
     }
 
     void OpenGLShader::Bind() const
     {
+        BBZ_PROFILE_FUNCTION();
+
         glUseProgram(m_RendererID);
     }
 
     void OpenGLShader::Unbind() const
     {
+        BBZ_PROFILE_FUNCTION();
+
         glUseProgram(NULL);
     }
 
@@ -80,23 +92,31 @@ namespace Bubatsu
 
     void OpenGLShader::UploadUniformInt(const String& name, int value)
     {
+        BBZ_PROFILE_FUNCTION();
+
         GLint location = glGetUniformLocation(m_RendererID, name.c_str());
         glUniform1i(location, value);
     }
 
     void OpenGLShader::UploadUniformIVec2(const String& name, const IVec2& values)
     {
+        BBZ_PROFILE_FUNCTION();
+
         GLint location = glGetUniformLocation(m_RendererID, name.c_str());
         glUniform2i(location, values.x, values.y);
     }
 
     void OpenGLShader::UploadUniformIVec3(const String& name, const IVec3& values)
     {
+        BBZ_PROFILE_FUNCTION();
+
         GLint location = glGetUniformLocation(m_RendererID, name.c_str());
         glUniform3i(location, values.x, values.y, values.z);
     }
 
-    void OpenGLShader::UploadUniformIVec4(const std::string& name, const IVec4& values) {
+    void OpenGLShader::UploadUniformIVec4(const std::string& name, const IVec4& values)
+    {
+        BBZ_PROFILE_FUNCTION();
 
         GLint location = glGetUniformLocation(m_RendererID, name.c_str());
         glUniform4i(location, values.x, values.y, values.z, values.w);
@@ -104,48 +124,64 @@ namespace Bubatsu
 
     void OpenGLShader::UploadUniformFloat(const String& name, float value)
     {
+        BBZ_PROFILE_FUNCTION();
+
         GLint location = glGetUniformLocation(m_RendererID, name.c_str());
         glUniform1f(location, value);
     }
 
     void OpenGLShader::UploadUniformFVec2(const String& name, const FVec2& values)
     {
+        BBZ_PROFILE_FUNCTION();
+
         GLint location = glGetUniformLocation(m_RendererID, name.c_str());
         glUniform2f(location, values.x, values.y);
     }
 
     void OpenGLShader::UploadUniformFVec3(const String& name, const FVec3& values)
     {
+        BBZ_PROFILE_FUNCTION();
+
         GLint location = glGetUniformLocation(m_RendererID, name.c_str());
         glUniform3f(location, values.x, values.y, values.z);
     }
 
     void OpenGLShader::UploadUniformFVec4(const std::string& name, const FVec4& values)
     {
+        BBZ_PROFILE_FUNCTION();
+
         GLint location = glGetUniformLocation(m_RendererID, name.c_str());
         glUniform4f(location, values.x, values.y, values.z, values.w);
     }
 
     void OpenGLShader::UploadUniformFMat2(const String& name, const FMat2& matrix)
     {
+        BBZ_PROFILE_FUNCTION();
+
         GLint location = glGetUniformLocation(m_RendererID, name.c_str());
         glUniformMatrix2fv(location, 1, GL_FALSE, RawValuePtr(matrix));
     }
 
     void OpenGLShader::UploadUniformFMat3(const String& name, const FMat3& matrix)
     {
+        BBZ_PROFILE_FUNCTION();
+
         GLint location = glGetUniformLocation(m_RendererID, name.c_str());
         glUniformMatrix3fv(location, 1, GL_FALSE, RawValuePtr(matrix));
     }
 
     void OpenGLShader::UploadUniformFMat4(const String& name, const FMat4& matrix)
     {
+        BBZ_PROFILE_FUNCTION();
+
         GLint location = glGetUniformLocation(m_RendererID, name.c_str());
         glUniformMatrix4fv(location, 1, GL_FALSE, RawValuePtr(matrix));
     }
 
     String OpenGLShader::ReadFile(const String& filepath)
     {
+        BBZ_PROFILE_FUNCTION();
+
         String result;
         std::ifstream in(filepath, std::ios::in | std::ios::binary);
         if (in)
@@ -167,6 +203,8 @@ namespace Bubatsu
 
     std::unordered_map<GLenum, String> OpenGLShader::PreProcess(const String& source)
     {
+        BBZ_PROFILE_FUNCTION();
+
         std::unordered_map<GLenum, String> shaderSources;
 
         const char* typeToken = "#type";
@@ -190,6 +228,8 @@ namespace Bubatsu
 
     void OpenGLShader::Compile(const std::unordered_map<GLenum, String>& shaderSources)
     {
+        BBZ_PROFILE_FUNCTION();
+
         GLuint program = glCreateProgram();
         BBZ_CORE_ASSERT(shaderSources.size() > 2, "Only 2 Shaders Supported");
         std::array<GLenum, 2 /*Shader Count*/> glShaderIDs;
@@ -262,3 +302,4 @@ namespace Bubatsu
         m_RendererID = program;
     }
 }
+

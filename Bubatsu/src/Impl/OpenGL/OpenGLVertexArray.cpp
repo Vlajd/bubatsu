@@ -32,26 +32,36 @@ namespace Bubatsu
 
     OpenGLVertexArray::OpenGLVertexArray()
     {
+        BBZ_PROFILE_FUNCTION();
+
         glCreateVertexArrays(1, &m_RendererID);
     }
 
     OpenGLVertexArray::~OpenGLVertexArray()
     {
+        BBZ_PROFILE_FUNCTION();
+
         glDeleteVertexArrays(1, &m_RendererID);
     }
 
     void OpenGLVertexArray::Bind() const
     {
+        BBZ_PROFILE_FUNCTION();
+
         glBindVertexArray(m_RendererID);
     }
 
     void OpenGLVertexArray::Unbind() const
     {
+        BBZ_PROFILE_FUNCTION();
+
         glBindVertexArray(NULL);
     }
 
     void OpenGLVertexArray::AddVertexBuffer(const SRef<VertexBuffer>& vertexBuffer)
     {
+        BBZ_PROFILE_FUNCTION();
+
         BBZ_CORE_ASSERT(!vertexBuffer->GetLayout().GetElements().size(), "OpenGLVertexArray::AddVertexBuffer::Vertex Buffer Has No Layout")
 
         glBindVertexArray(m_RendererID);
@@ -80,6 +90,8 @@ namespace Bubatsu
 
     void OpenGLVertexArray::SetIndexBuffer(const SRef<IndexBuffer>& indexBuffer)
     {
+        BBZ_PROFILE_FUNCTION();
+
         glBindVertexArray(m_RendererID);
         indexBuffer->Bind();
 

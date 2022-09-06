@@ -4,10 +4,15 @@
 namespace Bubatsu
 {
     OrthographicCameraController::OrthographicCameraController(float aspectRatio, bool enableRotation)
-        : m_AspectRatio(aspectRatio), m_Camera(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel), m_EnableRotation(enableRotation) {}
+        : m_AspectRatio(aspectRatio), m_Camera(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel), m_EnableRotation(enableRotation)
+    {
+        BBZ_PROFILE_FUNCTION();
+    }
     
     void OrthographicCameraController::OnUpdate(Timestep ts)
     {
+        BBZ_PROFILE_FUNCTION();
+
         if (Input::IsKeyboardPressed(BBZ_KEY_A))
         {
             m_Position.x -= ts * m_TranslationSpeed;
@@ -44,6 +49,8 @@ namespace Bubatsu
     
     void OrthographicCameraController::OnEvent(Event& e)
     {
+        BBZ_PROFILE_FUNCTION();
+
         EventDispatcher dispatcher(e);
         dispatcher.Dispatch<MouseScrolledEvent>(BBZ_BIND_EVENT_FUNCTION(OrthographicCameraController::OnMouseScrolled));
         dispatcher.Dispatch<WindowResizedEvent>(BBZ_BIND_EVENT_FUNCTION(OrthographicCameraController::OnWindowResized));
@@ -51,6 +58,8 @@ namespace Bubatsu
     
     bool OrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& e)
     {
+        BBZ_PROFILE_FUNCTION();
+
         m_ZoomLevel -= e.GetYOffset() * 0.25f;      // Hard Coded Zoom Speed
         m_ZoomLevel = std::max(m_ZoomLevel, 0.25f); // Hard Coded Max Zoom level
         m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
@@ -59,6 +68,8 @@ namespace Bubatsu
     
     bool OrthographicCameraController::OnWindowResized(WindowResizedEvent& e)
     {
+        BBZ_PROFILE_FUNCTION();
+
         m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
         m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
         return false;

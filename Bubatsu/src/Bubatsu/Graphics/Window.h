@@ -35,7 +35,7 @@ namespace Bubatsu
 
         virtual void* GetNativeWindow() const = 0;
 
-        static Window* Create(const WindowProperties& properties = WindowProperties());
+        static URef<Window> Create(const WindowProperties& properties = WindowProperties());
     };
 }
 

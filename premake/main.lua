@@ -79,13 +79,19 @@ workspace "Bubatsu"
 			}
 
 			filter "configurations:Debug"
-				defines "BBZ_DEBUG"
+				defines {
+                    "BBZ_DEBUG",
+                    "BBZ_PROFILE"
+                }
 				runtime "Debug"
 				symbols "on"
 				disablewarnings "4996"
 
 			filter "configurations:Release"
-				defines "BBZ_RELEASE"
+				defines {
+                    "BBZ_PROFILE",
+                    "BBZ_RELEASE"
+                }
 				runtime "Release"
 				symbols "on"
 			
@@ -132,12 +138,18 @@ workspace "Bubatsu"
 			}
 
 		filter "configurations:Debug"
-			defines "BBZ_DEBUG"
+			defines {
+                "BBZ_PROFILE",
+                "BBZ_DEBUG"
+            }
             runtime "Debug"
 			symbols "on"
 
 		filter "configurations:Release"
-			defines "BBZ_RELEASE"
+			defines {
+                "BBZ_PROFILE",
+                "BBZ_RELEASE"
+            }
             runtime "Release"
 			symbols "on"
 

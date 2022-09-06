@@ -26,8 +26,8 @@ namespace Bubatsu
 
     private:
         struct Renderer2DData {
-            SRef<Shader> FlatColorShader;
-            SRef<Shader> TextureShader;
+            SRef<Shader> Shader;
+            SRef<Texture2D> EmptyTexture;
             SRef<VertexArray> QuadVA;
         };
         

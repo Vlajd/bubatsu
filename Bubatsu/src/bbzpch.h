@@ -13,6 +13,7 @@
 #include <vector>
 
 #include "Bubatsu/Core/Log.h"
+#include "Bubatsu/Debug/Instrumentor.h"
 
 #ifdef BBZ_PLATFORM_WINDOWS
 #   include <Windows.h>

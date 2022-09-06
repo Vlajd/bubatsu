@@ -21,6 +21,8 @@ namespace Bubatsu
 
     void ImGuiLayer::OnAttach()
     {
+        BBZ_PROFILE_FUNCTION();
+
         // Setup Dear ImGui context
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
@@ -54,6 +56,8 @@ namespace Bubatsu
 
     void ImGuiLayer::OnDetach()
     {
+        BBZ_PROFILE_FUNCTION();
+
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
@@ -61,6 +65,8 @@ namespace Bubatsu
 
     void ImGuiLayer::Begin()
     {
+        BBZ_PROFILE_FUNCTION();
+
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
@@ -68,6 +74,8 @@ namespace Bubatsu
 
     void ImGuiLayer::End()
     {
+        BBZ_PROFILE_FUNCTION();
+
         ImGuiIO& io = ImGui::GetIO();
         Application& app = Application::Get();
         io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
@@ -84,9 +92,5 @@ namespace Bubatsu
             glfwMakeContextCurrent(backup_current_context);
         }
     }
-
-    void ImGuiLayer::OnImGuiRender()
-    {
-        // ImGui Code Here
-    }
 }
+

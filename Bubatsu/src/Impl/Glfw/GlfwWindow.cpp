@@ -11,47 +11,60 @@
 
 namespace Bubatsu
 {
-    static bool s_GLFWInitialized = false;
+    unsigned short GlfwWindow::s_WindowCount;
 
     static void GLFWErrorCallback(int error, const char* description)
     {
         BBZ_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
     }
 
-    Window* Window::Create(const WindowProperties& properties)
+    URef<Window> Window::Create(const WindowProperties& properties)
     {
-        return new GlfwWindow(properties);
+        return NewURef<GlfwWindow>(properties);
     }
 
     GlfwWindow::GlfwWindow(const WindowProperties& properties)
     {
+        BBZ_PROFILE_FUNCTION();
+
         Init(properties);
     }
 
     GlfwWindow::~GlfwWindow()
     {
+        BBZ_PROFILE_FUNCTION();
+
         ShutDown();
     }
 
-    void GlfwWindow::Init(const WindowProperties& properties) {
+    void GlfwWindow::Init(const WindowProperties& properties)
+    {
+        BBZ_PROFILE_FUNCTION();
 
         m_Data.Title = properties.Title;
         m_Data.Width = properties.Width;
         m_Data.Height = properties.Height;
+        s_WindowCount = 0;
 
         BBZ_CORE_INFO("Creating window {0} ({1}, {2})", properties.Title, properties.Width, properties.Height);
 
-        if (!s_GLFWInitialized)
+        if (s_WindowCount == 0)
         {
+            BBZ_PROFILE_SCOPE("GlfwWindow::Init(const WindowProperties&) > glfwInit");
+
             int success = glfwInit();
             BBZ_CORE_ASSERT(!success, "Could Not Initialize GLFW!");
             glfwSetErrorCallback(GLFWErrorCallback);
-            s_GLFWInitialized = true;
         }
 
-        m_Window = glfwCreateWindow((int)properties.Width, (int)properties.Height, m_Data.Title.c_str(), nullptr, nullptr);
+        {
+            BBZ_PROFILE_SCOPE("GlfwWindow::Init(const WindowProperties&) > glfwCreateWindow");
 
-        m_Context = NewSRef<OpenGLContext>(m_Window);
+            m_Window = glfwCreateWindow((int)properties.Width, (int)properties.Height, m_Data.Title.c_str(), nullptr, nullptr);
+            s_WindowCount++;
+        }
+
+        m_Context = NewURef<OpenGLContext>(m_Window);
         m_Context->Init();
 
         glfwSetWindowUserPointer(m_Window, &m_Data);
@@ -152,17 +165,23 @@ namespace Bubatsu
 
     void GlfwWindow::ShutDown()
     {
+        BBZ_PROFILE_FUNCTION();
+
         glfwDestroyWindow(m_Window);
     }
 
     void GlfwWindow::OnUpdate()
     {
+        BBZ_PROFILE_FUNCTION();
+
         glfwPollEvents();
         m_Context->SwapBuffers();
     }
 
     void GlfwWindow::SetVSync(bool enabled)
     {
+        BBZ_PROFILE_FUNCTION();
+
         if (enabled)
         {
             glfwSwapInterval(1);

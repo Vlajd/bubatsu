@@ -6,7 +6,7 @@ ExampleRenderer2D::ExampleRenderer2D()
 
 void ExampleRenderer2D::OnAttach()
 {
-    m_Texture = Bubatsu::Texture2D::Create("assets/textures/chicken.png");
+    m_Texture = Bubatsu::Texture2D::Create("Assets/Textures/chicken.png");
 }
 
 void ExampleRenderer2D::OnDetach()

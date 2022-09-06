@@ -15,6 +15,8 @@ namespace Bubatsu
 
     void OpenGLContext::Init()
     {
+        BBZ_PROFILE_FUNCTION();
+
         glfwMakeContextCurrent(m_WindowHandle);
         int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
         BBZ_CORE_ASSERT(!status, "Failed To Inizialize Glad!");
@@ -27,6 +29,8 @@ namespace Bubatsu
 
     void OpenGLContext::SwapBuffers()
     {
+        BBZ_PROFILE_FUNCTION();
+
         glfwSwapBuffers(m_WindowHandle);
     }
 }

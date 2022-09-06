@@ -35,7 +35,7 @@ namespace Bubatsu
         virtual void ShutDown();
 
         GLFWwindow* m_Window;
-        SRef<Context> m_Context;
+        URef<Context> m_Context;
 
         struct WindowData
         {
@@ -47,6 +47,8 @@ namespace Bubatsu
         };
 
         WindowData m_Data;
+
+        static unsigned short s_WindowCount;
     };
 }
 
