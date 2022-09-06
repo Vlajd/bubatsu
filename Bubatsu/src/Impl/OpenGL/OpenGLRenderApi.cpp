@@ -33,7 +33,11 @@ namespace Bubatsu
 
     void OpenGLRenderApi::DrawIndexed(const SRef<VertexArray>& vertexArray)
     {
-        glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+        DrawIndexed(vertexArray, vertexArray->GetIndexBuffer()->GetCount());
+    }
+    void OpenGLRenderApi::DrawIndexed(const SRef<VertexArray>& vertexArray, uint32_t indexCount)
+    {
+        glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 }

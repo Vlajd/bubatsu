@@ -16,6 +16,7 @@ namespace Bubatsu
 
         virtual const String& GetName() const = 0;
         virtual void SetInt(const String& name, int value) = 0;
+        virtual void SetIntArray(const String& name, int* values, uint32_t count) = 0;
         virtual void SetFloat(const String& name, float value) = 0;
         virtual void SetFVec3(const String& name, FVec3 value) = 0;
         virtual void SetFVec4(const String& name, FVec4 value) = 0;

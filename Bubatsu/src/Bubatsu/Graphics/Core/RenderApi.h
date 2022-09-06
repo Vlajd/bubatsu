@@ -21,6 +21,7 @@ namespace Bubatsu
         virtual void Clear() = 0;
 
         virtual void DrawIndexed(const SRef<VertexArray>& vertexArray) = 0;
+        virtual void DrawIndexed(const SRef<VertexArray>& vertexArray, uint32_t indexCount) = 0;
 
         inline static Api GetApi() { return m_Api; }
 

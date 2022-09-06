@@ -22,10 +22,11 @@ void ExampleRenderer2D::OnUpdate(Bubatsu::Timestep ts)
 
     Bubatsu::Renderer2D::BeginScene(m_Camera.GetCamera());
 
-    Bubatsu::Renderer2D::DrawQuad({  0.0f,  0.0f },        { 0.8f, 0.8f }, m_Color);
-    Bubatsu::Renderer2D::DrawQuad({ -1.1f,  0.1f }, 45.0f, { 1.2f, 1.2f }, m_Color);
-    Bubatsu::Renderer2D::DrawQuad({  1.1f,  0.1f }, 45.0f, { 1.2f, 1.2f }, m_Color);
-    Bubatsu::Renderer2D::DrawQuad({ 0.0f,  1.5f, -0.1f }, { 9.9f, 9.9f }, m_Texture, 2.0f, { 0.0f, 0.5f, 1.0f, 1.0f });
+    Bubatsu::Renderer2D::DrawQuad({ 0.0f, 0.0f }, { 0.8f, 0.8f }, m_Color);
+    Bubatsu::Renderer2D::DrawQuad({ 5.0f, 5.0f }, { 1.8f, 0.8f }, m_Color);
+    Bubatsu::Renderer2D::DrawQuad({ -5.0f, -5.0f }, { 1.8f, 0.8f }, m_Color);
+    Bubatsu::Renderer2D::DrawQuad({ 10.0f, 10.0f }, { 3.0f, 3.0f }, m_Texture, { 0.0f, 0.2f, 0.5f, 1.0f });
+    Bubatsu::Renderer2D::DrawQuad({ 5.0f, 10.0f }, { 3.0f, 3.0f }, m_Texture, { 0.0f, 0.2f, 0.5f, 1.0f });
 
     Bubatsu::Renderer2D::EndScene();
 }

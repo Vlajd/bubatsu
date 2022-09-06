@@ -75,6 +75,11 @@ namespace Bubatsu
         UploadUniformInt(name, value);
     }
 
+    void OpenGLShader::SetIntArray(const String& name, int* values, uint32_t count)
+    {
+        UploadUniformIntArray(name, values, count);
+    }
+
     void OpenGLShader::SetFloat(const String& name, float value)
     {
         UploadUniformFloat(name, value);
@@ -101,6 +106,14 @@ namespace Bubatsu
 
         GLint location = glGetUniformLocation(m_RendererID, name.c_str());
         glUniform1i(location, value);
+    }
+
+    void OpenGLShader::UploadUniformIntArray(const String& name, int* values, uint32_t count)
+    {
+        BBZ_PROFILE_FUNCTION();
+
+        GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+        glUniform1iv(location, count, values);
     }
 
     void OpenGLShader::UploadUniformIVec2(const String& name, const IVec2& values)

@@ -14,6 +14,7 @@ namespace Bubatsu
         virtual void Clear() override;
 
         virtual void DrawIndexed(const SRef<VertexArray>& vertexArray) override;
+        virtual void DrawIndexed(const SRef<VertexArray>& vertexArray, uint32_t indexCount) override;
     };
 }
 

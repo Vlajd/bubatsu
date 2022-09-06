@@ -10,10 +10,10 @@ namespace Bubatsu
     struct WindowProperties
     {
         String Title;
-        unsigned int Width;
-        unsigned int Height;
+        uint32_t Width;
+        uint32_t Height;
 
-        WindowProperties(const String& title = "Bubatsu Engine", unsigned int width = 690, unsigned int height = 420)
+        WindowProperties(const String& title = "Bubatsu Engine", uint32_t width = 690, uint32_t height = 420)
             : Title(title), Width(width), Height(height) {}
     };
 
@@ -26,8 +26,8 @@ namespace Bubatsu
 
         virtual void OnUpdate() = 0;
 
-        virtual unsigned int GetWidth() const = 0;
-        virtual unsigned int GetHeight() const = 0;
+        virtual uint32_t GetWidth() const = 0;
+        virtual uint32_t GetHeight() const = 0;
 
         virtual void SetEventCallback(const EventCallback& callback) = 0;
         virtual void SetVSync(bool enabled) = 0;

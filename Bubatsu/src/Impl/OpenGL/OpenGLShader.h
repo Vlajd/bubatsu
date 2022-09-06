@@ -21,12 +21,14 @@ namespace Bubatsu
 
         virtual const String& GetName() const override { return m_Name; }
         virtual void SetInt(const String& name, int value) override;
+        virtual void SetIntArray(const String& name, int* values, uint32_t count) override;
         virtual void SetFloat(const String& name, float value) override;
         virtual void SetFVec3(const String& name, FVec3 value) override;
         virtual void SetFVec4(const String& name, FVec4 value) override;
         virtual void SetFMat4(const String& name, FMat4 value) override;
 
         void UploadUniformInt(const String& name, int value);
+        void UploadUniformIntArray(const String& name, int* values, uint32_t count);
         void UploadUniformIVec2(const String& name, const IVec2& values);
         void UploadUniformIVec3(const String& name, const IVec3& values);
         void UploadUniformIVec4(const String& name, const IVec4& values);

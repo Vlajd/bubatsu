@@ -35,6 +35,11 @@ namespace Bubatsu
             s_RenderApi->DrawIndexed(vertexArray);
         }
 
+        inline static void DrawIndexed(const SRef<VertexArray>& vertexArray, uint32_t indexCount)
+        {
+            s_RenderApi->DrawIndexed(vertexArray, indexCount);
+        }
+
     private:
         static SRef<RenderApi> s_RenderApi;
     };

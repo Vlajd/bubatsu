@@ -46,6 +46,9 @@ namespace Bubatsu
 
     template<typename T>
     using Vector = std::vector<T>;
+
+    template<typename T, size_t _size>
+    using Array = std::array<T, _size>;
 }
 
 #ifdef BBZ_ENABLE_ASSERTS
