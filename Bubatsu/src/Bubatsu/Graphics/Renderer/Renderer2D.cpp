@@ -69,6 +69,34 @@ namespace Bubatsu
         BBZ_PROFILE_FUNCTION();
     }
 
+    // Solid Color
+    void Renderer2D::DrawQuad(FMat4 transform, FVec4 color)
+    {
+        BBZ_PROFILE_FUNCTION();
+
+        s_Data->Shader->SetFVec4("u_Color", color);
+        s_Data->Shader->SetFMat4("u_Transform", transform);
+        s_Data->EmptyTexture->Bind();
+        s_Data->QuadVA->Bind();
+        RenderCommand::DrawIndexed(s_Data->QuadVA);
+    }
+
+    // Solid color, no rotation
+    void Renderer2D::DrawQuad(FVec2 position, FVec2 size, FVec4 color)
+    {
+        DrawQuad(FVec3(position, 0.0f), size, color);
+    }
+
+    void Renderer2D::DrawQuad(FVec3 position, FVec2 size, FVec4 color)
+    {
+        DrawQuad(
+            Translate(FMat4(1.0f), position) *
+            Scale(FMat4(1.0f), FVec3(size, 1.0f)),
+            color
+        );
+    }
+
+    // Solid color, rotation
     void Renderer2D::DrawQuad(FVec2 position, float rotation, FVec2 size, FVec4 color)
     {
         DrawQuad(FVec3(position, 0.0f), rotation, size, color);
@@ -76,18 +104,87 @@ namespace Bubatsu
 
     void Renderer2D::DrawQuad(FVec3 position, float rotation, FVec2 size, FVec4 color)
     {
+        DrawQuad(
+            Translate(FMat4(1.0f), position) *
+            Rotate(FMat4(1.0f), Radians(rotation), FVec3(0.0f, 0.0f, 1.0f)) *
+            Scale(FMat4(1.0f), FVec3(size, 1.0f)),
+            color
+        );
+    }
+
+    void Renderer2D::DrawQuad(FMat4 transform, const SRef<Texture2D>& texture)
+    {
+        DrawQuad(transform, texture, 1.0f, FVec4(1.0f));
+    }
+
+    void Renderer2D::DrawQuad(FMat4 transform, const SRef<Texture2D>& texture, FVec4 tint)
+    {
+        DrawQuad(transform, texture, 1.0f, tint);
+    }
+
+    void Renderer2D::DrawQuad(FMat4 transform, const SRef<Texture2D>& texture, float tiling)
+    {
+        DrawQuad(transform, texture, tiling, FVec4(1.0f));
+    }
+
+    // Texture
+    void Renderer2D::DrawQuad(FMat4 transform, const SRef<Texture2D>& texture, float tiling, FVec4 tint)
+    {
         BBZ_PROFILE_FUNCTION();
 
-        s_Data->Shader->SetFVec4("u_Color", color);
-        s_Data->EmptyTexture->Bind();
-
-        FMat4 transform = Translate(FMat4(1.0f), position) *
-                          Rotate(FMat4(1.0f), Radians(rotation), FVec3(0.0f, 0.0f, 1.0f)) *
-                          Scale(FMat4(1.0f), FVec3(size, 1.0f));
+        s_Data->Shader->SetFVec4("u_Color", tint);
+        s_Data->Shader->SetFloat("u_Tiling", tiling);
         s_Data->Shader->SetFMat4("u_Transform", transform);
-
+        texture->Bind();
         s_Data->QuadVA->Bind();
         RenderCommand::DrawIndexed(s_Data->QuadVA);
+
+    }
+
+    void Renderer2D::DrawQuad(FVec2 position, FVec2 size, const SRef<Texture2D>& texture)
+    {
+        DrawQuad(FVec3(position, 0.0f), size, texture);
+    }
+
+    void Renderer2D::DrawQuad(FVec2 position, FVec2 size, const SRef<Texture2D>& texture, FVec4 tint)
+    {
+        DrawQuad(FVec3(position, 0.0f), size, texture, tint);
+    }
+
+    void Renderer2D::DrawQuad(FVec2 position, FVec2 size, const SRef<Texture2D>& texture, float tiling)
+    {
+        DrawQuad(FVec3(position, 0.0f), size, texture, tiling);
+    }
+
+    void Renderer2D::DrawQuad(FVec2 position, FVec2 size, const SRef<Texture2D>& texture, float tiling, FVec4 tint)
+    {
+        DrawQuad(FVec3(position, 0.0f), size, texture, tiling, tint);
+    }
+
+    void Renderer2D::DrawQuad(FVec3 position, FVec2 size, const SRef<Texture2D>& texture)
+    {
+        DrawQuad(position, size, texture, 1.0f, FVec4(1.0f));
+    }
+
+    void Renderer2D::DrawQuad(FVec3 position, FVec2 size, const SRef<Texture2D>& texture, FVec4 tint)
+    {
+        DrawQuad(position, size, texture, 1.0f, tint);
+    }
+
+    void Renderer2D::DrawQuad(FVec3 position, FVec2 size, const SRef<Texture2D>& texture, float tiling)
+    {
+        DrawQuad(position, size, texture, tiling, FVec4(1.0f));
+    }
+
+    void Renderer2D::DrawQuad(FVec3 position, FVec2 size, const SRef<Texture2D>& texture, float tiling, FVec4 tint)
+    {
+        DrawQuad(
+            Translate(FMat4(1.0f), position) *
+            Scale(FMat4(1.0f), FVec3(size, 1.0f)),
+            texture,
+            tiling,
+            tint
+        );
     }
 
     void Renderer2D::DrawQuad(FVec2 position, float rotation, FVec2 size, const SRef<Texture2D>& texture)
@@ -95,21 +192,46 @@ namespace Bubatsu
         DrawQuad(FVec3(position, 0.0f), rotation, size, texture);
     }
 
+    void Renderer2D::DrawQuad(FVec2 position, float rotation, FVec2 size, const SRef<Texture2D>& texture, FVec4 tint)
+    {
+        DrawQuad(FVec3(position, 0.0f), rotation, size, texture, tint);
+    }
+
+    void Renderer2D::DrawQuad(FVec2 position, float rotation, FVec2 size, const SRef<Texture2D>& texture, float tiling)
+    {
+        DrawQuad(FVec3(position, 0.0f), rotation, size, texture, tiling);
+    }
+
+    void Renderer2D::DrawQuad(FVec2 position, float rotation, FVec2 size, const SRef<Texture2D>& texture, float tiling, FVec4 tint)
+    {
+        DrawQuad(FVec3(position, 0.0f), rotation, size, texture, tiling, tint);
+    }
+
     void Renderer2D::DrawQuad(FVec3 position, float rotation, FVec2 size, const SRef<Texture2D>& texture)
     {
-        BBZ_PROFILE_FUNCTION();
+        DrawQuad(position, rotation, size, texture, 1.0f, FVec4(1.0f));
+    }
 
-        s_Data->Shader->SetFVec4("u_Color", FVec4(1.0f));
+    void Renderer2D::DrawQuad(FVec3 position, float rotation, FVec2 size, const SRef<Texture2D>& texture, FVec4 tint)
+    {
+        DrawQuad(position, rotation, size, texture, 1.0f, tint);
+    }
 
-        FMat4 transform = Translate(FMat4(1.0f), position) *
+    void Renderer2D::DrawQuad(FVec3 position, float rotation, FVec2 size, const SRef<Texture2D>& texture, float tiling)
+    {
+        DrawQuad(position, rotation, size, texture, tiling, FVec4(1.0f));
+    }
+
+    void Renderer2D::DrawQuad(FVec3 position, float rotation, FVec2 size, const SRef<Texture2D>& texture, float tiling, FVec4 tint)
+    {
+        DrawQuad(
+            Translate(FMat4(1.0f), position) *
             Rotate(FMat4(1.0f), Radians(rotation), FVec3(0.0f, 0.0f, 1.0f)) *
-            Scale(FMat4(1.0f), FVec3(size, 1.0f));
-        s_Data->Shader->SetFMat4("u_Transform", transform);
-
-        texture->Bind();
-
-        s_Data->QuadVA->Bind();
-        RenderCommand::DrawIndexed(s_Data->QuadVA);
+            Scale(FMat4(1.0f), FVec3(size, 1.0f)),
+            texture,
+            tiling,
+            tint
+        );
     }
 }
 

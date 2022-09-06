@@ -75,6 +75,11 @@ namespace Bubatsu
         UploadUniformInt(name, value);
     }
 
+    void OpenGLShader::SetFloat(const String& name, float value)
+    {
+        UploadUniformFloat(name, value);
+    }
+
     void OpenGLShader::SetFVec3(const String& name, FVec3 value)
     {
         UploadUniformFVec3(name, value);

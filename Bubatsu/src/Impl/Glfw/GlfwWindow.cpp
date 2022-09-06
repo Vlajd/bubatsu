@@ -46,7 +46,7 @@ namespace Bubatsu
         m_Data.Height = properties.Height;
         s_WindowCount = 0;
 
-        BBZ_CORE_INFO("Creating window {0} ({1}, {2})", properties.Title, properties.Width, properties.Height);
+        BBZ_CORE_INFO("Creating window ({0}) ({1}, {2})", properties.Title, properties.Width, properties.Height);
 
         if (s_WindowCount == 0)
         {

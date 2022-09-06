@@ -21,6 +21,7 @@ namespace Bubatsu
 
         virtual const String& GetName() const override { return m_Name; }
         virtual void SetInt(const String& name, int value) override;
+        virtual void SetFloat(const String& name, float value) override;
         virtual void SetFVec3(const String& name, FVec3 value) override;
         virtual void SetFVec4(const String& name, FVec4 value) override;
         virtual void SetFMat4(const String& name, FMat4 value) override;

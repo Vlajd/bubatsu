@@ -16,7 +16,7 @@ namespace Bubatsu
     {
         BBZ_PROFILE_FUNCTION();
 
-        BBZ_CORE_ASSERT(s_Instance, "Application Already Exists!")
+        BBZ_CORE_ASSERT(s_Instance, "Application already exists!")
             s_Instance = this;
 
         m_Window = URef<Window>(Window::Create());
