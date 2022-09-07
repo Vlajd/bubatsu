@@ -3,8 +3,8 @@
 
 namespace Bubatsu
 {
-    OrthographicCameraController::OrthographicCameraController(float aspectRatio, bool enableRotation)
-        : m_AspectRatio(aspectRatio), m_Camera(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel), m_EnableRotation(enableRotation)
+    OrthographicCameraController::OrthographicCameraController(float aspectRatio)
+        : m_AspectRatio(aspectRatio), m_Camera(-m_AspectRatio * m_Zoom.Level, m_AspectRatio * m_Zoom.Level, -m_Zoom.Level, m_Zoom.Level)
     {
         BBZ_PROFILE_FUNCTION();
     }
@@ -13,56 +13,55 @@ namespace Bubatsu
     {
         BBZ_PROFILE_FUNCTION();
 
-        if (Input::IsKeyboardPressed(BBZ_KEY_A))
-        {
-            m_Position.x -= ts * m_TranslationSpeed;
-        }
-        if (Input::IsKeyboardPressed(BBZ_KEY_D))
-        {
-            m_Position.x += ts * m_TranslationSpeed;
-        }
-        if (Input::IsKeyboardPressed(BBZ_KEY_S))
-        {
-            m_Position.y -= ts * m_TranslationSpeed;
-        }
-        if (Input::IsKeyboardPressed(BBZ_KEY_W))
-        {
-            m_Position.y += ts * m_TranslationSpeed;
-        }
+        // ====================================================
+        // Zoom
+        // ====================================================
+        // BBZ_CORE_TRACE("Level({}), Target({})", m_Zoom.Level, m_Zoom.Target);
+        m_Zoom.Level += (m_Zoom.Target - m_Zoom.Level) * m_Zoom.LSpeed * ts;
+        m_Camera.SetProjection(-m_AspectRatio * m_Zoom.Level, m_AspectRatio * m_Zoom.Level, -m_Zoom.Level, m_Zoom.Level);
 
-        if (m_Rotation)
-        {
-            if (Input::IsKeyboardPressed(BBZ_KEY_E))
-            {
-                m_Rotation -= ts * m_RotationSpeed;
-            }
-            if (Input::IsKeyboardPressed(BBZ_KEY_Q))
-            {
-                m_Rotation += ts * m_RotationSpeed;
-            }
-        }
-
-        m_Camera.SetPosition(m_Position);
-
-        m_TranslationSpeed = m_ZoomLevel;
+        // ====================================================
+        // Translate
+        // ====================================================
+        m_Translate.ZSpeed = (m_Zoom.Level + m_Zoom.Min) / m_Zoom.Max * m_Translate.Speed;
+        m_Translate.Position += (m_Translate.Target - m_Translate.Position) * m_Translate.LSpeed * FVec3(ts);
+        m_Camera.SetPosition(m_Translate.Position);
     }
     
     void OrthographicCameraController::OnEvent(Event& e)
     {
         BBZ_PROFILE_FUNCTION();
 
+        if (e.IsInClass(Event::MouseButtonPressed)) { m_Translate.MouseDown = true; }
+        if (e.IsInClass(Event::MouseButtonReleased)) { m_Translate.MouseDown = false; }
+
         EventDispatcher dispatcher(e);
+        dispatcher.Dispatch<MouseMovedEvent>(BBZ_BIND_EVENT_FUNCTION(OrthographicCameraController::OnMouseMoved));
         dispatcher.Dispatch<MouseScrolledEvent>(BBZ_BIND_EVENT_FUNCTION(OrthographicCameraController::OnMouseScrolled));
         dispatcher.Dispatch<WindowResizedEvent>(BBZ_BIND_EVENT_FUNCTION(OrthographicCameraController::OnWindowResized));
+    }
+
+    bool OrthographicCameraController::OnMouseMoved(MouseMovedEvent& e)
+    {
+        BBZ_PROFILE_FUNCTION();
+
+        if (m_Translate.MouseDown)
+        {
+            m_Translate.Target += FVec3(-(e.GetX() - m_Translate.StartMouse.x), e.GetY() - m_Translate.StartMouse.y, 0.0f) * m_Translate.ZSpeed;
+        }
+        m_Translate.StartMouse = FVec2(e.GetX(), e.GetY());
+
+        return false;
     }
     
     bool OrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& e)
     {
         BBZ_PROFILE_FUNCTION();
 
-        m_ZoomLevel -= e.GetYOffset() * 0.25f;      // Hard Coded Zoom Speed
-        m_ZoomLevel = std::max(m_ZoomLevel, 0.25f); // Hard Coded Max Zoom level
-        m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+        m_Zoom.Target -= e.GetYOffset() * m_Zoom.Speed;
+        m_Zoom.Target = std::max(m_Zoom.Target, m_Zoom.Min);
+        m_Zoom.Target = std::min(m_Zoom.Target, m_Zoom.Max);
+
         return false;
     }
     
@@ -71,7 +70,7 @@ namespace Bubatsu
         BBZ_PROFILE_FUNCTION();
 
         m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
-        m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+        m_Camera.SetProjection(-m_AspectRatio * m_Zoom.Level, m_AspectRatio * m_Zoom.Level, -m_Zoom.Level, m_Zoom.Level);
         return false;
     }
 }

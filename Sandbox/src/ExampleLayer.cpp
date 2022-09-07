@@ -2,7 +2,7 @@
 #include "Impl/OpenGL/OpenGLShader.h"
 
 ExampleLayer::ExampleLayer()
-    : Layer("Example"), m_Camera(690.0f / 420.0f, false), m_SquarePosition(0.0f)
+    : Layer("Example"), m_Camera(690.0f / 420.0f), m_SquarePosition(0.0f)
 {
     m_VertexArray = Bubatsu::VertexArray::Create();
 

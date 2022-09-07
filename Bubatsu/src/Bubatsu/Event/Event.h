@@ -6,25 +6,6 @@
 
 namespace Bubatsu
 {
-    enum class EventClass
-    {
-        None = 0,
-        ApplicationRendered, ApplicationTicked, ApplicationUpdated,
-        KeyboardPressed, KeyboardReleased, KeyboardTyped,
-        MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled,
-        WindowClosed, WindowFocused, WindowLostFocus, WindowMoved, WindowResized
-    };
-
-    enum EventCategory
-    {
-        None = 0,
-        EventCategoryApplication = BIT(0),
-        EventCategoryInput = BIT(1),
-        EventCategoryKeyboard = BIT(2),
-        EventCategoryMouse = BIT(3),
-        EventCategoryMouseButton = BIT(4)
-    };
-
     #define EVENT_CLASS(eventClass) static EventClass GetStaticClass() { return EventClass::##eventClass; }\
                                     virtual EventClass GetClass() const override { return GetStaticClass(); }\
                                     virtual const char* GetName() const override { return #eventClass; }
@@ -35,6 +16,23 @@ namespace Bubatsu
     class BUBATSU_API Event
     {
     public:
+        enum EventClass
+        {
+            ApplicationRendered, ApplicationTicked, ApplicationUpdated,
+            KeyboardPressed, KeyboardReleased, KeyboardTyped,
+            MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled,
+            WindowClosed, WindowFocused, WindowLostFocus, WindowMoved, WindowResized
+        };
+
+        enum EventCategory
+        {
+            EventCategoryApplication = BIT(0),
+            EventCategoryInput = BIT(1),
+            EventCategoryKeyboard = BIT(2),
+            EventCategoryMouse = BIT(3),
+            EventCategoryMouseButton = BIT(4)
+        };
+
         bool Handled = false;
 
         virtual EventClass GetClass() const = 0;
@@ -45,6 +43,11 @@ namespace Bubatsu
         inline bool IsInCategory(EventCategory category)
         {
             return GetCategory() & category;
+        }
+
+        inline bool IsInClass(EventClass eclass)
+        {
+            return GetClass() == eclass;
         }
     };
 

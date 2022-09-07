@@ -22,9 +22,9 @@ void ExampleRenderer2D::OnUpdate(Bubatsu::Timestep ts)
 
     Bubatsu::Renderer2D::BeginScene(m_Camera.GetCamera());
 
-    for (float y = -5.0f; y < 5.0f; y += 0.1f)
+    for (float y = -5.0f; y < 5.0f; y += 0.5f)
     {
-        for (float x = -5.0f; x < 5.0f; x += 0.1f)
+        for (float x = -5.0f; x < 5.0f; x += 0.5f)
         {
             Bubatsu::FVec4 color = { (x + 5.0f) / 10.0f, 0.2f, (y + 5.0f) / 10.0f, 1.0f };
             Bubatsu::Renderer2D::DrawQuad({ x, y }, { 0.45f, 0.45f }, color);
@@ -52,3 +52,4 @@ void ExampleRenderer2D::OnEvent(Bubatsu::Event& e)
 {
     m_Camera.OnEvent(e);
 }
+
