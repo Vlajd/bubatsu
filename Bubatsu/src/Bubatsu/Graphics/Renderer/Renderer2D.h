@@ -13,6 +13,15 @@ namespace Bubatsu
     class Renderer2D
     {
     public:
+        struct Statistics
+        {
+            uint32_t DrawCalls;
+            uint32_t QuadCount;
+
+            uint32_t GetVertexCount() { return QuadCount * 4; }
+            uint32_t GetIndexCount() { return QuadCount * 6; }
+        };
+
         static void Init();
         static void Shutdown();
 
@@ -48,7 +57,11 @@ namespace Bubatsu
         static void DrawQuad(FVec3 position, float rotation, FVec2 size, const SRef<Texture2D>& texture, float tiling);
         static void DrawQuad(FVec3 position, float rotation, FVec2 size, const SRef<Texture2D>& texture, float tiling, FVec4 tint);
 
+        static void ResetStatistics();
+        static Statistics GetStatistics();
     private:
+        static void FlushAndReset();
+
         struct QuadVertex
         {
             FVec3 Position;
@@ -60,7 +73,7 @@ namespace Bubatsu
         
         struct Renderer2DData
         {
-            static const uint32_t MAXQUADS = 8192;
+            static const uint32_t MAXQUADS = 8184;
             static const uint32_t MAXVERTICES = MAXQUADS * 4;
             static const uint32_t MAXINDICES = MAXQUADS * 6;
             static const uint32_t MAXTEXTURESLOTS = 32; // TODO: Render Capabilities
@@ -74,6 +87,7 @@ namespace Bubatsu
             Array<SRef<Texture2D>, MAXTEXTURESLOTS> TextureSlots;
             uint32_t TextureSlotIndex = 1; // 0 is EmptyTexture
             FVec4 QuadVertexPositions[4];
+            Statistics Stats;
         };
 
         static Renderer2DData s_Data;

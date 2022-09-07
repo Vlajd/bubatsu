@@ -93,6 +93,8 @@ namespace Bubatsu
         s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
 
         s_Data.TextureSlotIndex = 1; // 0 is EmptyTexture
+
+        ResetStatistics();
     }
 
     void Renderer2D::EndScene()
@@ -107,11 +109,24 @@ namespace Bubatsu
 
     void Renderer2D::Flush()
     {
+        BBZ_PROFILE_FUNCTION();
+
         for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++)
         {
             s_Data.TextureSlots[i]->Bind(i);
         }
         RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
+
+        s_Data.Stats.DrawCalls++;
+    }
+
+    void Renderer2D::FlushAndReset()
+    {
+        EndScene();
+
+        s_Data.QuadIndexCount = 0;
+        s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
+        s_Data.TextureSlotIndex = 1; // 0 is EmptyTexture
     }
 
 
@@ -126,6 +141,11 @@ namespace Bubatsu
     void Renderer2D::DrawQuad(FVec3 position, FVec2 size, FVec4 color)
     {
         BBZ_PROFILE_FUNCTION();
+
+        if (s_Data.QuadIndexCount >= Renderer2DData::MAXINDICES)
+        {
+            FlushAndReset();
+        }
 
         s_Data.QuadVertexBufferPtr->Position = position;
         s_Data.QuadVertexBufferPtr->Color = color;
@@ -157,6 +177,7 @@ namespace Bubatsu
 
 
         s_Data.QuadIndexCount += 6;
+        s_Data.Stats.QuadCount++;
     }
 
 
@@ -171,6 +192,11 @@ namespace Bubatsu
     void Renderer2D::DrawQuad(FVec3 position, float rotation, FVec2 size, FVec4 color)
     {
         BBZ_PROFILE_FUNCTION();
+
+        if (s_Data.QuadIndexCount >= Renderer2DData::MAXINDICES)
+        {
+            FlushAndReset();
+        }
 
         FMat4 transform = Translate(FMat4(1.0f), position)
                           * Rotate(FMat4(1.0f), Radians(rotation), FVec3(0.0f, 0.0f, 1.0f))
@@ -206,6 +232,7 @@ namespace Bubatsu
 
 
         s_Data.QuadIndexCount += 6;
+        s_Data.Stats.QuadCount++;
     }
 
 
@@ -251,6 +278,11 @@ namespace Bubatsu
     {
         BBZ_PROFILE_FUNCTION();
 
+        if (s_Data.QuadIndexCount >= Renderer2DData::MAXINDICES)
+        {
+            FlushAndReset();
+        }
+
         float textureIndex = 0.0f;
 
         for (uint32_t i = 1; i < s_Data.TextureSlotIndex; i++) // 0 is EmptyTexture
@@ -299,6 +331,7 @@ namespace Bubatsu
 
 
         s_Data.QuadIndexCount += 6;
+        s_Data.Stats.QuadCount++;
     }
 
     void Renderer2D::DrawQuad(FVec2 position, float rotation, FVec2 size, const SRef<Texture2D>& texture)
@@ -339,6 +372,11 @@ namespace Bubatsu
     void Renderer2D::DrawQuad(FVec3 position, float rotation, FVec2 size, const SRef<Texture2D>& texture, float tiling, FVec4 tint)
     {
         BBZ_PROFILE_FUNCTION();
+
+        if (s_Data.QuadIndexCount >= Renderer2DData::MAXINDICES)
+        {
+            FlushAndReset();
+        }
 
         float textureIndex = 0.0f;
 
@@ -393,6 +431,18 @@ namespace Bubatsu
 
 
         s_Data.QuadIndexCount += 6;
+        s_Data.Stats.QuadCount++;
+    }
+
+    void Renderer2D::ResetStatistics()
+    {
+        s_Data.Stats.DrawCalls = 0;
+        s_Data.Stats.QuadCount = 0;
+    }
+
+    Renderer2D::Statistics Renderer2D::GetStatistics()
+    {
+        return s_Data.Stats;
     }
 }
 
