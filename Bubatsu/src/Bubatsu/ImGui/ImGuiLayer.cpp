@@ -63,6 +63,13 @@ namespace Bubatsu
         ImGui::DestroyContext();
     }
 
+    void ImGuiLayer::OnEvent(Event& e)
+    {
+        ImGuiIO& io = ImGui::GetIO();
+        e.Handled |= e.IsInCategory(Event::EventCategoryMouse) & io.WantCaptureMouse;
+        e.Handled |= e.IsInCategory(Event::EventCategoryMouse) & io.WantCaptureKeyboard;
+    }
+
     void ImGuiLayer::Begin()
     {
         BBZ_PROFILE_FUNCTION();

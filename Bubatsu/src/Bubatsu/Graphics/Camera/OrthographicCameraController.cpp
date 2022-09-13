@@ -16,7 +16,6 @@ namespace Bubatsu
         // ====================================================
         // Zoom
         // ====================================================
-        // BBZ_CORE_TRACE("Level({}), Target({})", m_Zoom.Level, m_Zoom.Target);
         m_Zoom.Level += (m_Zoom.Target - m_Zoom.Level) * m_Zoom.LSpeed * ts;
         m_Camera.SetProjection(-m_AspectRatio * m_Zoom.Level, m_AspectRatio * m_Zoom.Level, -m_Zoom.Level, m_Zoom.Level);
 

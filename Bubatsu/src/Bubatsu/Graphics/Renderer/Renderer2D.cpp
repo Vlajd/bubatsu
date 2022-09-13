@@ -101,7 +101,7 @@ namespace Bubatsu
     {
         BBZ_PROFILE_FUNCTION();
 
-        uint32_t dataSize = (uint8_t*)s_Data.QuadVertexBufferPtr - (uint8_t*)s_Data.QuadVertexBufferBase;
+        uint32_t dataSize = (uint32_t)((uint8_t*)s_Data.QuadVertexBufferPtr - (uint8_t*)s_Data.QuadVertexBufferBase);
         s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, dataSize);
 
         Flush();
@@ -110,6 +110,11 @@ namespace Bubatsu
     void Renderer2D::Flush()
     {
         BBZ_PROFILE_FUNCTION();
+
+        if (s_Data.QuadIndexCount == 0)
+        {
+            return;
+        }
 
         for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++)
         {
@@ -129,16 +134,7 @@ namespace Bubatsu
         s_Data.TextureSlotIndex = 1; // 0 is EmptyTexture
     }
 
-
-    // ========================================================
-    // Solid color, no rotation
-    // ========================================================
-    void Renderer2D::DrawQuad(FVec2 position, FVec2 size, FVec4 color)
-    {
-        DrawQuad(FVec3(position, 0.0f), size, color);
-    }
-
-    void Renderer2D::DrawQuad(FVec3 position, FVec2 size, FVec4 color)
+    void Renderer2D::DrawQuad(FMat4 transform, FVec4 color)
     {
         BBZ_PROFILE_FUNCTION();
 
@@ -147,49 +143,26 @@ namespace Bubatsu
             FlushAndReset();
         }
 
-        s_Data.QuadVertexBufferPtr->Position = position;
-        s_Data.QuadVertexBufferPtr->Color = color;
-        s_Data.QuadVertexBufferPtr->TexCoord = FVec2(0.0f, 0.0f);
-        s_Data.QuadVertexBufferPtr->TexIndex = 0.0f; // 0 is EmptyTexture
-        s_Data.QuadVertexBufferPtr->Tiling = 1.0f;
-        s_Data.QuadVertexBufferPtr++;
+        FVec2 textureCoords[4] = { FVec2(0.0f, 0.0f), FVec2(1.0f, 0.0f), FVec2(1.0f, 1.0f), FVec2(0.0f, 1.0f) };
 
-        s_Data.QuadVertexBufferPtr->Position = FVec3(position.x + size.x, position.y, position.z);
-        s_Data.QuadVertexBufferPtr->Color = color;
-        s_Data.QuadVertexBufferPtr->TexCoord = FVec2(1.0f, 0.0f);
-        s_Data.QuadVertexBufferPtr->TexIndex = 0.0f;
-        s_Data.QuadVertexBufferPtr->Tiling = 1.0f;
-        s_Data.QuadVertexBufferPtr++;
-
-        s_Data.QuadVertexBufferPtr->Position = FVec3(position.x + size.x, position.y + size.y, position.z);
-        s_Data.QuadVertexBufferPtr->Color = color;
-        s_Data.QuadVertexBufferPtr->TexCoord = FVec2(1.0f, 1.0f);
-        s_Data.QuadVertexBufferPtr->TexIndex = 0.0f;
-        s_Data.QuadVertexBufferPtr->Tiling = 1.0f;
-        s_Data.QuadVertexBufferPtr++;
-
-        s_Data.QuadVertexBufferPtr->Position = FVec3(position.x, position.y + size.y, position.z);
-        s_Data.QuadVertexBufferPtr->Color = color;
-        s_Data.QuadVertexBufferPtr->TexCoord = FVec2(0.0f, 1.0f);
-        s_Data.QuadVertexBufferPtr->TexIndex = 0.0f;
-        s_Data.QuadVertexBufferPtr->Tiling = 1.0f;
-        s_Data.QuadVertexBufferPtr++;
-
+        for (size_t i = 0; i < 4; i++)
+        {
+            s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[i];
+            s_Data.QuadVertexBufferPtr->Color = color;
+            s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
+            s_Data.QuadVertexBufferPtr->TexIndex = 0.0f;
+            s_Data.QuadVertexBufferPtr->Tiling = 1.0f;
+            s_Data.QuadVertexBufferPtr++;
+        }
 
         s_Data.QuadIndexCount += 6;
+
+#       ifdef BBZ_PROFILE
         s_Data.Stats.QuadCount++;
+#       endif
     }
 
-
-    // ========================================================
-    // Solid color, rotation
-    // ========================================================
-    void Renderer2D::DrawQuad(FVec2 position, float rotation, FVec2 size, FVec4 color)
-    {
-        DrawQuad(FVec3(position, 0.0f), rotation, size, color);
-    }
-
-    void Renderer2D::DrawQuad(FVec3 position, float rotation, FVec2 size, FVec4 color)
+    void Renderer2D::DrawQuad(FMat4 transform, SRef<Texture2D> texture, float tiling, FVec4 tint)
     {
         BBZ_PROFILE_FUNCTION();
 
@@ -198,178 +171,51 @@ namespace Bubatsu
             FlushAndReset();
         }
 
-        FMat4 transform = Translate(FMat4(1.0f), position)
-                          * Rotate(FMat4(1.0f), Radians(rotation), FVec3(0.0f, 0.0f, 1.0f))
-                          * Scale(FMat4(1.0f), FVec3(size, 1.0f));
-
-        s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[0];
-        s_Data.QuadVertexBufferPtr->Color = color;
-        s_Data.QuadVertexBufferPtr->TexCoord = FVec2(0.0f, 0.0f);
-        s_Data.QuadVertexBufferPtr->TexIndex = 0.0f; // 0 is EmptyTexture
-        s_Data.QuadVertexBufferPtr->Tiling = 1.0f;
-        s_Data.QuadVertexBufferPtr++;
-
-        s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[1];
-        s_Data.QuadVertexBufferPtr->Color = color;
-        s_Data.QuadVertexBufferPtr->TexCoord = FVec2(1.0f, 0.0f);
-        s_Data.QuadVertexBufferPtr->TexIndex = 0.0f;
-        s_Data.QuadVertexBufferPtr->Tiling = 1.0f;
-        s_Data.QuadVertexBufferPtr++;
-
-        s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[2];
-        s_Data.QuadVertexBufferPtr->Color = color;
-        s_Data.QuadVertexBufferPtr->TexCoord = FVec2(1.0f, 1.0f);
-        s_Data.QuadVertexBufferPtr->TexIndex = 0.0f;
-        s_Data.QuadVertexBufferPtr->Tiling = 1.0f;
-        s_Data.QuadVertexBufferPtr++;
-
-        s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[3];
-        s_Data.QuadVertexBufferPtr->Color = color;
-        s_Data.QuadVertexBufferPtr->TexCoord = FVec2(0.0f, 1.0f);
-        s_Data.QuadVertexBufferPtr->TexIndex = 0.0f;
-        s_Data.QuadVertexBufferPtr->Tiling = 1.0f;
-        s_Data.QuadVertexBufferPtr++;
+        constexpr FVec2 textureCoords[4] = { FVec2(0.0f, 0.0f), FVec2(1.0f, 0.0f), FVec2(1.0f, 1.0f), FVec2(0.0f, 1.0f) };
 
 
-        s_Data.QuadIndexCount += 6;
-        s_Data.Stats.QuadCount++;
-    }
-
-
-    // ========================================================
-    // Texture
-    // ========================================================
-    void Renderer2D::DrawQuad(FVec2 position, FVec2 size, const SRef<Texture2D>& texture)
-    {
-        DrawQuad(FVec3(position, 0.0f), size, texture);
-    }
-
-    void Renderer2D::DrawQuad(FVec2 position, FVec2 size, const SRef<Texture2D>& texture, FVec4 tint)
-    {
-        DrawQuad(FVec3(position, 0.0f), size, texture, tint);
-    }
-
-    void Renderer2D::DrawQuad(FVec2 position, FVec2 size, const SRef<Texture2D>& texture, float tiling)
-    {
-        DrawQuad(FVec3(position, 0.0f), size, texture, tiling);
-    }
-
-    void Renderer2D::DrawQuad(FVec2 position, FVec2 size, const SRef<Texture2D>& texture, float tiling, FVec4 tint)
-    {
-        DrawQuad(FVec3(position, 0.0f), size, texture, tiling, tint);
-    }
-
-    void Renderer2D::DrawQuad(FVec3 position, FVec2 size, const SRef<Texture2D>& texture)
-    {
-        DrawQuad(position, size, texture, 1.0f, FVec4(1.0f));
-    }
-
-    void Renderer2D::DrawQuad(FVec3 position, FVec2 size, const SRef<Texture2D>& texture, FVec4 tint)
-    {
-        DrawQuad(position, size, texture, 1.0f, tint);
-    }
-
-    void Renderer2D::DrawQuad(FVec3 position, FVec2 size, const SRef<Texture2D>& texture, float tiling)
-    {
-        DrawQuad(position, size, texture, tiling, FVec4(1.0f));
-    }
-
-    void Renderer2D::DrawQuad(FVec3 position, FVec2 size, const SRef<Texture2D>& texture, float tiling, FVec4 tint)
-    {
-        BBZ_PROFILE_FUNCTION();
-
-        if (s_Data.QuadIndexCount >= Renderer2DData::MAXINDICES)
-        {
-            FlushAndReset();
-        }
-
-        float textureIndex = 0.0f;
-
-        for (uint32_t i = 1; i < s_Data.TextureSlotIndex; i++) // 0 is EmptyTexture
+        float texIndex = 0.0f;
+        for (size_t i = 0; i < s_Data.TextureSlotIndex; i++)
         {
             if (*s_Data.TextureSlots[i].get() == *texture.get())
             {
-                textureIndex = (float)i;
+                texIndex = (float)i;
                 break;
             }
         }
 
-        if (textureIndex == 0.0f)
+        if (texIndex == 0.0f)
         {
-            textureIndex = (float)s_Data.TextureSlotIndex;
+            if (s_Data.TextureSlotIndex >= Renderer2DData::MAXTEXTURESLOTS)
+            {
+                FlushAndReset();
+            }
+
+            texIndex = (float)s_Data.TextureSlotIndex;
             s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
             s_Data.TextureSlotIndex++;
         }
 
-        s_Data.QuadVertexBufferPtr->Position = position;
-        s_Data.QuadVertexBufferPtr->Color = tint;
-        s_Data.QuadVertexBufferPtr->TexCoord = FVec2(0.0f, 0.0f);
-        s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
-        s_Data.QuadVertexBufferPtr->Tiling = tiling;
-        s_Data.QuadVertexBufferPtr++;
 
-        s_Data.QuadVertexBufferPtr->Position = FVec3(position.x + size.x, position.y, position.z);
-        s_Data.QuadVertexBufferPtr->Color = tint;
-        s_Data.QuadVertexBufferPtr->TexCoord = FVec2(1.0f, 0.0f);
-        s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
-        s_Data.QuadVertexBufferPtr->Tiling = tiling;
-        s_Data.QuadVertexBufferPtr++;
-
-        s_Data.QuadVertexBufferPtr->Position = FVec3(position.x + size.x, position.y + size.y, position.z);
-        s_Data.QuadVertexBufferPtr->Color = tint;
-        s_Data.QuadVertexBufferPtr->TexCoord = FVec2(1.0f, 1.0f);
-        s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
-        s_Data.QuadVertexBufferPtr->Tiling = tiling;
-        s_Data.QuadVertexBufferPtr++;
-
-        s_Data.QuadVertexBufferPtr->Position = FVec3(position.x, position.y + size.y, position.z);
-        s_Data.QuadVertexBufferPtr->Color = tint;
-        s_Data.QuadVertexBufferPtr->TexCoord = FVec2(0.0f, 1.0f);
-        s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
-        s_Data.QuadVertexBufferPtr->Tiling = tiling;
-        s_Data.QuadVertexBufferPtr++;
-
+        for (size_t i = 0; i < 4; i++)
+        {
+            s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[i];
+            s_Data.QuadVertexBufferPtr->Color = tint;
+            s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
+            s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
+            s_Data.QuadVertexBufferPtr->Tiling = tiling;
+            s_Data.QuadVertexBufferPtr++;
+        }
 
         s_Data.QuadIndexCount += 6;
+
+#       ifdef BBZ_PROFILE
         s_Data.Stats.QuadCount++;
+#       endif
     }
 
-    void Renderer2D::DrawQuad(FVec2 position, float rotation, FVec2 size, const SRef<Texture2D>& texture)
-    {
-        DrawQuad(FVec3(position, 0.0f), rotation, size, texture);
-    }
 
-    void Renderer2D::DrawQuad(FVec2 position, float rotation, FVec2 size, const SRef<Texture2D>& texture, FVec4 tint)
-    {
-        DrawQuad(FVec3(position, 0.0f), rotation, size, texture, tint);
-    }
-
-    void Renderer2D::DrawQuad(FVec2 position, float rotation, FVec2 size, const SRef<Texture2D>& texture, float tiling)
-    {
-        DrawQuad(FVec3(position, 0.0f), rotation, size, texture, tiling);
-    }
-
-    void Renderer2D::DrawQuad(FVec2 position, float rotation, FVec2 size, const SRef<Texture2D>& texture, float tiling, FVec4 tint)
-    {
-        DrawQuad(FVec3(position, 0.0f), rotation, size, texture, tiling, tint);
-    }
-
-    void Renderer2D::DrawQuad(FVec3 position, float rotation, FVec2 size, const SRef<Texture2D>& texture)
-    {
-        DrawQuad(position, rotation, size, texture, 1.0f, FVec4(1.0f));
-    }
-
-    void Renderer2D::DrawQuad(FVec3 position, float rotation, FVec2 size, const SRef<Texture2D>& texture, FVec4 tint)
-    {
-        DrawQuad(position, rotation, size, texture, 1.0f, tint);
-    }
-
-    void Renderer2D::DrawQuad(FVec3 position, float rotation, FVec2 size, const SRef<Texture2D>& texture, float tiling)
-    {
-        DrawQuad(position, rotation, size, texture, tiling, FVec4(1.0f));
-    }
-
-    void Renderer2D::DrawQuad(FVec3 position, float rotation, FVec2 size, const SRef<Texture2D>& texture, float tiling, FVec4 tint)
+    void Renderer2D::DrawQuad(FMat4 transform, const SRef<SubTexture2D> subTexture, float tiling, FVec4 tint)
     {
         BBZ_PROFILE_FUNCTION();
 
@@ -378,60 +224,47 @@ namespace Bubatsu
             FlushAndReset();
         }
 
-        float textureIndex = 0.0f;
+        const FVec2* textureCoords = subTexture->GetTexCoords();
 
-        for (uint32_t i = 1; i < s_Data.TextureSlotIndex; i++) // 0 is EmptyTexture
+
+        float texIndex = 0.0f;
+        for (size_t i = 0; i < s_Data.TextureSlotIndex; i++)
         {
-            if (*s_Data.TextureSlots[i].get() == *texture.get())
+            if (*s_Data.TextureSlots[i].get() == *subTexture->GetTexture().get())
             {
-                textureIndex = (float)i;
+                texIndex = (float)i;
                 break;
             }
         }
 
-        if (textureIndex == 0.0f)
+        if (texIndex == 0.0f)
         {
-            textureIndex = (float)s_Data.TextureSlotIndex;
-            s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
+            if (s_Data.TextureSlotIndex >= Renderer2DData::MAXTEXTURESLOTS)
+            {
+                FlushAndReset();
+            }
+
+            texIndex = (float)s_Data.TextureSlotIndex;
+            s_Data.TextureSlots[s_Data.TextureSlotIndex] = subTexture->GetTexture();
             s_Data.TextureSlotIndex++;
         }
 
-        FMat4 transform = Translate(FMat4(1.0f), position)
-                          * Rotate(FMat4(1.0f), Radians(rotation), FVec3(0.0f, 0.0f, 1.0f))
-                          * Scale(FMat4(1.0f), FVec3(size, 1.0f));
 
-
-        s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[0];
-        s_Data.QuadVertexBufferPtr->Color = tint;
-        s_Data.QuadVertexBufferPtr->TexCoord = FVec2(0.0f, 0.0f);
-        s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
-        s_Data.QuadVertexBufferPtr->Tiling = tiling;
-        s_Data.QuadVertexBufferPtr++;
-
-        s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[1];
-        s_Data.QuadVertexBufferPtr->Color = tint;
-        s_Data.QuadVertexBufferPtr->TexCoord = FVec2(1.0f, 0.0f);
-        s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
-        s_Data.QuadVertexBufferPtr->Tiling = tiling;
-        s_Data.QuadVertexBufferPtr++;
-
-        s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[2];
-        s_Data.QuadVertexBufferPtr->Color = tint;
-        s_Data.QuadVertexBufferPtr->TexCoord = FVec2(1.0f, 1.0f);
-        s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
-        s_Data.QuadVertexBufferPtr->Tiling = tiling;
-        s_Data.QuadVertexBufferPtr++;
-
-        s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[3];
-        s_Data.QuadVertexBufferPtr->Color = tint;
-        s_Data.QuadVertexBufferPtr->TexCoord = FVec2(0.0f, 1.0f);
-        s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
-        s_Data.QuadVertexBufferPtr->Tiling = tiling;
-        s_Data.QuadVertexBufferPtr++;
-
+        for (size_t i = 0; i < 4; i++)
+        {
+            s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[i];
+            s_Data.QuadVertexBufferPtr->Color = tint;
+            s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
+            s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
+            s_Data.QuadVertexBufferPtr->Tiling = tiling;
+            s_Data.QuadVertexBufferPtr++;
+        }
 
         s_Data.QuadIndexCount += 6;
+
+#       ifdef BBZ_PROFILE
         s_Data.Stats.QuadCount++;
+#       endif
     }
 
     void Renderer2D::ResetStatistics()

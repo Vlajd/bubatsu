@@ -17,6 +17,7 @@
 #include "Bubatsu/Graphics/Core/VertexArray.h"
 
 #include "Bubatsu/Graphics/Renderer/Renderer2D.h"
+#include "Bubatsu/Graphics/Texture/SubTexture2D.h"
 
 #include "Bubatsu/Graphics/Camera/OrthographicCamera.h"
 #include "Bubatsu/Graphics/Camera/OrthographicCameraController.h"

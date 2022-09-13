@@ -4,6 +4,7 @@
 #include "Bubatsu/Graphics/Core/VertexArray.h"
 #include "Bubatsu/Graphics/Core/Shader.h"
 #include "Bubatsu/Graphics/Core/Texture.h"
+#include "Bubatsu/Graphics/Texture/SubTexture2D.h"
 #include "Bubatsu/Core/Math.h"
 #include "Bubatsu/Core/Core.h"
 
@@ -30,32 +31,71 @@ namespace Bubatsu
         static void Flush();
 
         // Solid Color, no rotation
-        static void DrawQuad(FVec2 position, FVec2 size, FVec4 color);
-        static void DrawQuad(FVec3 position, FVec2 size, FVec4 color);
+        static inline void DrawQuad(FVec2 position, FVec2 size, FVec4 color);
+        static inline void DrawQuad(FVec3 position, FVec2 size, FVec4 color);
 
         // Solid Color, rotation
-        static void DrawQuad(FVec2 position, float rotation, FVec2 size, FVec4 color);
-        static void DrawQuad(FVec3 position, float rotation, FVec2 size, FVec4 color);
+        static inline void DrawQuad(FVec2 position, float rotation, FVec2 size, FVec4 color);
+        static inline void DrawQuad(FVec3 position, float rotation, FVec2 size, FVec4 color);
+
+        // Solid Color
+        static void DrawQuad(FMat4 transform, FVec4 color);
 
         // Texture, no rotation
-        static void DrawQuad(FVec2 position, FVec2 size, const SRef<Texture2D>& texture);
-        static void DrawQuad(FVec2 position, FVec2 size, const SRef<Texture2D>& texture, FVec4 tint);
-        static void DrawQuad(FVec2 position, FVec2 size, const SRef<Texture2D>& texture, float tiling);
-        static void DrawQuad(FVec2 position, FVec2 size, const SRef<Texture2D>& texture, float tiling, FVec4 tint);
-        static void DrawQuad(FVec3 position, FVec2 size, const SRef<Texture2D>& texture);
-        static void DrawQuad(FVec3 position, FVec2 size, const SRef<Texture2D>& texture, FVec4 tint);
-        static void DrawQuad(FVec3 position, FVec2 size, const SRef<Texture2D>& texture, float tiling);
-        static void DrawQuad(FVec3 position, FVec2 size, const SRef<Texture2D>& texture, float tiling, FVec4 tint);
+        static inline void DrawQuad(FVec2 position, FVec2 size, SRef<Texture2D> texture);
+        static inline void DrawQuad(FVec2 position, FVec2 size, SRef<Texture2D> texture, FVec4 tint);
+        static inline void DrawQuad(FVec2 position, FVec2 size, SRef<Texture2D> texture, float tiling);
+        static inline void DrawQuad(FVec2 position, FVec2 size, SRef<Texture2D> texture, float tiling, FVec4 tint);
+        static inline void DrawQuad(FVec2 position, FVec2 size, SRef<Texture2D> texture, FVec4 tint, float tiling);
+        static inline void DrawQuad(FVec3 position, FVec2 size, SRef<Texture2D> texture);
+        static inline void DrawQuad(FVec3 position, FVec2 size, SRef<Texture2D> texture, FVec4 tint);
+        static inline void DrawQuad(FVec3 position, FVec2 size, SRef<Texture2D> texture, float tiling);
+        static inline void DrawQuad(FVec3 position, FVec2 size, SRef<Texture2D> texture, float tiling, FVec4 tint);
+        static inline void DrawQuad(FVec3 position, FVec2 size, SRef<Texture2D> texture, FVec4 tint, float tiling);
 
         // Texture, rotation
-        static void DrawQuad(FVec2 position, float rotation, FVec2 size, const SRef<Texture2D>& texture);
-        static void DrawQuad(FVec2 position, float rotation, FVec2 size, const SRef<Texture2D>& texture, FVec4 tint);
-        static void DrawQuad(FVec2 position, float rotation, FVec2 size, const SRef<Texture2D>& texture, float tiling);
-        static void DrawQuad(FVec2 position, float rotation, FVec2 size, const SRef<Texture2D>& texture, float tiling, FVec4 tint);
-        static void DrawQuad(FVec3 position, float rotation, FVec2 size, const SRef<Texture2D>& texture);
-        static void DrawQuad(FVec3 position, float rotation, FVec2 size, const SRef<Texture2D>& texture, FVec4 tint);
-        static void DrawQuad(FVec3 position, float rotation, FVec2 size, const SRef<Texture2D>& texture, float tiling);
-        static void DrawQuad(FVec3 position, float rotation, FVec2 size, const SRef<Texture2D>& texture, float tiling, FVec4 tint);
+        static inline void DrawQuad(FVec2 position, float rotation, FVec2 size, SRef<Texture2D> texture);
+        static inline void DrawQuad(FVec2 position, float rotation, FVec2 size, SRef<Texture2D> texture, FVec4 tint);
+        static inline void DrawQuad(FVec2 position, float rotation, FVec2 size, SRef<Texture2D> texture, float tiling);
+        static inline void DrawQuad(FVec2 position, float rotation, FVec2 size, SRef<Texture2D> texture, float tiling, FVec4 tint);
+        static inline void DrawQuad(FVec2 position, float rotation, FVec2 size, SRef<Texture2D> texture, FVec4 tint, float tiling);
+        static inline void DrawQuad(FVec3 position, float rotation, FVec2 size, SRef<Texture2D> texture);
+        static inline void DrawQuad(FVec3 position, float rotation, FVec2 size, SRef<Texture2D> texture, FVec4 tint);
+        static inline void DrawQuad(FVec3 position, float rotation, FVec2 size, SRef<Texture2D> texture, float tiling);
+        static inline void DrawQuad(FVec3 position, float rotation, FVec2 size, SRef<Texture2D> texture, float tiling, FVec4 tint);
+        static inline void DrawQuad(FVec3 position, float rotation, FVec2 size, SRef<Texture2D> texture, FVec4 tint, float tiling);
+
+        // Texture
+        static void DrawQuad(FMat4 transform, const SRef<Texture2D> subTexture, float tiling, FVec4 tint);
+        static inline void DrawQuad(FMat4 transform, const SRef<Texture2D> subTexture, FVec4 tint, float tiling);
+
+        // SubTexture, no rotation
+        static inline void DrawQuad(FVec2 position, FVec2 size, SRef<SubTexture2D> subTexture);
+        static inline void DrawQuad(FVec2 position, FVec2 size, SRef<SubTexture2D> subTexture, FVec4 tint);
+        static inline void DrawQuad(FVec2 position, FVec2 size, SRef<SubTexture2D> subTexture, float tiling);
+        static inline void DrawQuad(FVec2 position, FVec2 size, SRef<SubTexture2D> subTexture, float tiling, FVec4 tint);
+        static inline void DrawQuad(FVec2 position, FVec2 size, SRef<SubTexture2D> subTexture, FVec4 tint, float tiling);
+        static inline void DrawQuad(FVec3 position, FVec2 size, SRef<SubTexture2D> subTexture);
+        static inline void DrawQuad(FVec3 position, FVec2 size, SRef<SubTexture2D> subTexture, FVec4 tint);
+        static inline void DrawQuad(FVec3 position, FVec2 size, SRef<SubTexture2D> subTexture, float tiling);
+        static inline void DrawQuad(FVec3 position, FVec2 size, SRef<SubTexture2D> subTexture, float tiling, FVec4 tint);
+        static inline void DrawQuad(FVec3 position, FVec2 size, SRef<SubTexture2D> subTexture, FVec4 tint, float tiling);
+
+        // SubTexture, rotation
+        static inline void DrawQuad(FVec2 position, float rotation, FVec2 size, SRef<SubTexture2D> subTexture);
+        static inline void DrawQuad(FVec2 position, float rotation, FVec2 size, SRef<SubTexture2D> subTexture, FVec4 tint);
+        static inline void DrawQuad(FVec2 position, float rotation, FVec2 size, SRef<SubTexture2D> subTexture, float tiling);
+        static inline void DrawQuad(FVec2 position, float rotation, FVec2 size, SRef<SubTexture2D> subTexture, float tiling, FVec4 tint);
+        static inline void DrawQuad(FVec2 position, float rotation, FVec2 size, SRef<SubTexture2D> subTexture, FVec4 tint, float tiling);
+        static inline void DrawQuad(FVec3 position, float rotation, FVec2 size, SRef<SubTexture2D> subTexture);
+        static inline void DrawQuad(FVec3 position, float rotation, FVec2 size, SRef<SubTexture2D> subTexture, FVec4 tint);
+        static inline void DrawQuad(FVec3 position, float rotation, FVec2 size, SRef<SubTexture2D> subTexture, float tiling);
+        static inline void DrawQuad(FVec3 position, float rotation, FVec2 size, SRef<SubTexture2D> subTexture, float tiling, FVec4 tint);
+        static inline void DrawQuad(FVec3 position, float rotation, FVec2 size, SRef<SubTexture2D> subTexture, FVec4 tint, float tiling);
+
+        // SubTexture
+        static void DrawQuad(FMat4 transform, const SRef<SubTexture2D> subTexture, float tiling, FVec4 tint);
+        static inline void DrawQuad(FMat4 transform, const SRef<SubTexture2D> subTexture, FVec4 tint, float tiling);
 
         static void ResetStatistics();
         static Statistics GetStatistics();
@@ -93,4 +133,6 @@ namespace Bubatsu
         static Renderer2DData s_Data;
     };
 }
+
+#include "Renderer2D.inl"
 

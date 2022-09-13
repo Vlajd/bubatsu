@@ -21,7 +21,7 @@ namespace Bubatsu
             float Speed = 0.45f;
             float LSpeed = 15.0f;
             float Min = 0.25f;
-            float Max = 1024.0f;
+            float Max = 512.0f;
         };
 
         struct TranslateData
@@ -30,8 +30,8 @@ namespace Bubatsu
             FVec3 Target = FVec3(0.0f);
             FVec2 StartMouse = FVec2(0.0f);
             bool MouseDown = false;
-            float Speed = 5.0f;
-            float LSpeed = 22.5f;
+            float Speed = 2.5f;
+            float LSpeed = 17.5f;
             float ZSpeed = 0.0f;
         };
 

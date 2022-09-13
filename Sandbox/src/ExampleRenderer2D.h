@@ -17,8 +17,8 @@ public:
 
 private:
     Bubatsu::OrthographicCameraController m_Camera;
-    Bubatsu::SRef<Bubatsu::VertexArray> m_VA;
-    Bubatsu::SRef<Bubatsu::Shader> m_Shader;
-    Bubatsu::SRef<Bubatsu::Texture2D> m_Texture;
+    Bubatsu::SRef<Bubatsu::Texture2D> m_SpriteSheet;
+    Bubatsu::SRef<Bubatsu::SubTexture2D> m_TextureStairs;
+    Bubatsu::SRef<Bubatsu::SubTexture2D> m_TextureTree;
 };
 
